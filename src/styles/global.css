@@ -688,9 +688,10 @@ pre code {
 .main-content.home-page {
   background: transparent;
   padding-top: 0;
+  padding-bottom: 0;
 }
 
-/* 首页中 hero 下方的所有内容块：半透明背景 */
+/* 首页中 hero 下方的所有内容块：背景色 */
 .main-content.home-page .content-block {
   position: relative;
   z-index: 3;
@@ -701,6 +702,21 @@ pre code {
 
 .main-content.home-page .content-block:first-of-type {
   border-radius: 12px 12px 0 0;
+}
+
+.main-content.home-page .content-block:last-of-type {
+  padding-bottom: 4rem;
+  margin-bottom: 0;
+}
+
+/* 首页 footer 需要背景 */
+.main-content.home-page .content-footer {
+  position: relative;
+  z-index: 3;
+  background: var(--bg);
+  padding: 1.25rem var(--content-px) 2rem;
+  margin: 0 calc(-1 * var(--content-px));
+  border-top: 1px solid var(--divider);
 }
 
 @media (max-width: 768px) {
