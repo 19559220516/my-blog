@@ -1,28 +1,41 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro'
+
+const codeExample = `app.post('/api/orders', auth, async (req, res) => {
+  const order = await db.create(req.body)
+  await notifyUsers(order)     // 自动通知
+  await logOperation(order)    // 操作日志
+  res.json({ code: 0, data: order })
+})`
 ---
 
-<BaseLayout title="项目 — YOURSITE">
-  <main>
-    <h1>项目</h1>
-    <p style="color:var(--text-secondary);margin-bottom:2rem">我做过的一些项目，点击查看详情。</p>
+<BaseLayout title="项目 — Wang Saifeng">
+  <h1>项目</h1>
+  <p style="color:var(--text-secondary);margin-bottom:1.5rem">
+    我参与构建的项目，点击查看详细文档。
+  </p>
 
-    <a href="/my-blog/projects/sn-workorder" class="project-card">
-      <h3>SN 售后工单系统</h3>
-      <p>基于微信小程序的售后工单全流程管理系统，支持工单创建/分配/跟踪、客户管理、数据看板、消息通知，配套 PC 后台管理端。</p>
-      <div class="tags">
-        <span class="tag">微信小程序</span>
-        <span class="tag">Node.js</span>
-        <span class="tag">Express</span>
-        <span class="tag">MySQL</span>
-        <span class="tag">ECharts</span>
-        <span class="tag">企业级</span>
-      </div>
-    </a>
-
-    <div class="project-card" style="opacity:0.5">
-      <h3>更多项目即将添加</h3>
-      <p>正在整理中</p>
+  <a href="/my-blog/projects/sn-workorder/" class="doc-card">
+    <h3>SN 售后工单系统 <span class="arrow">&rarr;</span></h3>
+    <p>基于微信小程序的售后工单全流程管理系统，支持工单创建/分配/跟踪、客户管理、数据看板、消息通知，配套 PC 后台管理端。</p>
+    <div class="doc-tags">
+      <span class="doc-tag">微信小程序</span>
+      <span class="doc-tag">Node.js</span>
+      <span class="doc-tag">Express</span>
+      <span class="doc-tag">MySQL</span>
+      <span class="doc-tag">ECharts</span>
+      <span class="doc-tag">企业级</span>
     </div>
-  </main>
+    <div class="doc-code-preview">
+      <pre><code>{/* API 架构示例 */}{codeExample}</code></pre>
+    </div>
+  </a>
+
+  <div class="doc-card" style="opacity:0.45; pointer-events:none;">
+    <h3>更多项目即将添加</h3>
+    <p>正在整理中，敬请期待。</p>
+    <div class="doc-tags">
+      <span class="doc-tag">Coming Soon</span>
+    </div>
+  </div>
 </BaseLayout>

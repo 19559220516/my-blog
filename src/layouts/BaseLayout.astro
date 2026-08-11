@@ -2,6 +2,7 @@
 import '../styles/global.css'
 
 const { title, description } = Astro.props
+const currentPath = Astro.url.pathname.replace(/\/$/, '')
 ---
 
 <!doctype html>
@@ -9,23 +10,146 @@ const { title, description } = Astro.props
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content={description || '个人博客 — 记录项目与技术思考'} />
-  <title>{title || 'YOURSITE'}</title>
+  <meta name="description" content={description || '王赛枫的技术博客 — 记录项目与技术思考'} />
+  <title>{title || 'Wang Saifeng'}</title>
+
+  <!-- 防闪烁: 在 HTML 解析前读取 localStorage 设置主题 -->
+  <script is:inline>
+    (function() {
+      const saved = localStorage.getItem('theme');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (saved === 'dark' || (!saved && prefersDark)) {
+        document.documentElement.classList.add('dark');
+      }
+    })();
+  </script>
 </head>
 <body>
-  <header>
-    <a href="/my-blog/" class="site-title">YOURSITE</a>
-    <nav>
-      <a href="/my-blog/">首页</a>
-      <a href="/my-blog/projects/">项目</a>
-      <a href="/my-blog/about/">关于</a>
-    </nav>
-  </header>
+  <a href="#main-content" class="skip-link">跳转到内容</a>
 
-  <slot />
+  <div class="page-layout" id="app">
 
-  <footer>
-    &copy; {new Date().getFullYear()} YOURSITE. Built with Astro.
-  </footer>
+    <!-- 移动端遮罩 -->
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+    <!-- 移动端汉堡按钮 -->
+    <button class="mobile-menu-btn" id="menu-btn" aria-label="菜单">
+      <span></span>
+    </button>
+
+    <!-- ======== 左侧侧边栏 ======== -->
+    <aside class="sidebar" id="sidebar">
+      <!-- 品牌 -->
+      <div class="sidebar-brand">
+        <a href="/my-blog/">Wang Saifeng</a>
+      </div>
+
+      <!-- 头像 + 简介 -->
+      <div class="sidebar-profile">
+        <div class="sidebar-avatar">WS</div>
+        <div class="sidebar-name">王赛枫</div>
+        <p class="sidebar-bio">全栈开发者 / 微信小程序 & Node.js</p>
+        <div class="sidebar-skills">
+          <span class="sidebar-skill">小程序</span>
+          <span class="sidebar-skill">Node.js</span>
+          <span class="sidebar-skill">MySQL</span>
+          <span class="sidebar-skill">Docker</span>
+        </div>
+      </div>
+
+      <!-- 导航菜单 -->
+      <nav class="sidebar-nav" aria-label="主导航">
+        <div class="sidebar-nav-label">导航</div>
+        <a href="/my-blog/" class={currentPath === '/my-blog' ? 'active' : ''}>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          首页
+        </a>
+        <a href="/my-blog/projects/" class={currentPath.startsWith('/my-blog/projects') ? 'active' : ''}>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+          项目
+        </a>
+        <a href="/my-blog/about/" class={currentPath === '/my-blog/about' ? 'active' : ''}>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+          关于
+        </a>
+      </nav>
+
+      <!-- 外部链接 -->
+      <div class="sidebar-links">
+        <a href="https://github.com/19559220516" target="_blank" rel="noopener">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.387.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61-.546-1.387-1.333-1.756-1.333-1.756-1.09-.745.083-.73.083-.73 1.205.085 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.418-1.305.762-1.604-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.605-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 21.795 24 17.295 24 12 24 5.37 18.63 0 12 0z"/></svg>
+          GitHub
+        </a>
+        <a href="mailto:wang13400721381@163.com">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 7L2 7"/></svg>
+          Email
+        </a>
+      </div>
+
+      <!-- 主题切换 -->
+      <div class="sidebar-theme">
+        <button class="theme-btn" id="theme-toggle" aria-label="切换主题">
+          <svg class="theme-icon theme-icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+          <svg class="theme-icon theme-icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          切换主题
+        </button>
+      </div>
+    </aside>
+
+    <!-- ======== 右侧主内容 ======== -->
+    <main class="main-content" id="main-content">
+      <slot />
+
+      <footer class="content-footer">
+        &copy; {new Date().getFullYear()} Wang Saifeng. Built with Astro.
+      </footer>
+    </main>
+
+  </div>
+
+  <!-- 移动端菜单 + 主题切换 JS -->
+  <script is:inline>
+    (function() {
+      const menuBtn = document.getElementById('menu-btn');
+      const app = document.getElementById('app');
+      const overlay = document.getElementById('sidebar-overlay');
+
+      function closeMenu() { app.classList.remove('sidebar-open'); }
+      menuBtn.addEventListener('click', function() {
+        app.classList.toggle('sidebar-open');
+      });
+      overlay.addEventListener('click', closeMenu);
+      // 点击侧边栏内链接后关闭
+      document.getElementById('sidebar').addEventListener('click', function(e) {
+        if (e.target.tagName === 'A') closeMenu();
+      });
+
+      // 主题切换
+      const toggle = document.getElementById('theme-toggle');
+      const sunIcon = toggle.querySelector('.theme-icon-sun');
+      const moonIcon = toggle.querySelector('.theme-icon-moon');
+
+      function setTheme(isDark) {
+        if (isDark) {
+          document.documentElement.classList.add('dark');
+          sunIcon.style.display = 'none';
+          moonIcon.style.display = '';
+        } else {
+          document.documentElement.classList.remove('dark');
+          sunIcon.style.display = '';
+          moonIcon.style.display = 'none';
+        }
+        localStorage.setItem('theme', isDark ? 'dark' : 'light');
+      }
+
+      // 初始化图标
+      const isDark = document.documentElement.classList.contains('dark');
+      setTheme(isDark);
+
+      toggle.addEventListener('click', function() {
+        setTheme(!document.documentElement.classList.contains('dark'));
+      });
+    })();
+  </script>
 </body>
 </html>

@@ -1,165 +1,188 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro'
 
-const title = 'SN 售后工单系统'
-const description = '基于微信小程序的售后工单全流程管理系统'
-const date = '2025-08-11'
-const tags = ['微信小程序', 'Node.js', 'Express', 'MySQL', 'ECharts']
-const repo = 'https://github.com/19559220516/sn-workorder'
----
-
-<BaseLayout title="SN 售后工单系统 — YOURSITE">
-  <main>
-    <h1>SN 售后工单系统</h1>
-    <p style="color:var(--text-secondary)">
-      发布于 2025-08-11
-      &nbsp;·&nbsp;
-      <a href="https://github.com/19559220516/sn-workorder" target="_blank">GitHub 源码</a>
-    </p>
-
-    <h2>项目简介</h2>
-    <p>
-      基于微信小程序的售后工单管理系统，涵盖工单全生命周期管理，从创建、分配、处理到完成，配合 PC 管理后台实现高效运营。
-      支持多角色协作（管理员/主管/工程师/客户），具备实时消息通知和数据统计分析能力。
-    </p>
-
-    <h2>技术栈</h2>
-    <div class="skills">
-      <span class="skill-tag">微信小程序</span>
-      <span class="skill-tag">Node.js</span>
-      <span class="skill-tag">Express</span>
-      <span class="skill-tag">MySQL</span>
-      <span class="skill-tag">ECharts</span>
-      <span class="skill-tag">Docker</span>
-      <span class="skill-tag">JWT</span>
-    </div>
-
-    <h2>核心功能</h2>
-    <ul>
-      <li><strong>工单管理</strong> — 创建、分配、转交、跟进、完成全流程，支持图片上传和费用记录</li>
-      <li><strong>客户管理</strong> — 客户信息维护，创建工单自动关联客户</li>
-      <li><strong>维护商管理</strong> — 第三方维护商信息与工单关联</li>
-      <li><strong>用户管理</strong> — 多角色权限（管理员/主管/工程师），实时在线状态</li>
-      <li><strong>数据看板</strong> — 工单统计、类型分布、趋势分析，ECharts 可视化</li>
-      <li><strong>消息通知</strong> — 站内消息系统，工单状态变更自动通知，15天自动清理</li>
-      <li><strong>通讯录</strong> — 用户列表在线状态显示，20秒实时刷新</li>
-      <li><strong>PC 后台</strong> — 独立管理端，支持批量操作、CSV 导出、数据筛选</li>
-    </ul>
-
-    <h2>技术亮点</h2>
-    <ul>
-      <li>数据库自动迁移，部署即可用，无需手动执行 SQL</li>
-      <li>命令模式操作日志，所有操作可追溯</li>
-      <li>微信服务通知集成，工单创建/转交/状态变更实时推送</li>
-      <li>用户在线状态自动检测，onShow/onHide 防抖上报</li>
-      <li>分包加载优化，页面加载速度提升 40%</li>
-      <li>代码包体积优化，主包仅 3.6KB</li>
-    </ul>
-
-    <h2>系统架构</h2>
-    <pre><code>┌─────────────┐     ┌──────────────┐     ┌──────────┐
+const archDiagram = `┌─────────────┐     ┌──────────────┐     ┌──────────┐
 │ 微信小程序   │────▶│  Node.js      │────▶│  MySQL    │
 │ (主包+分包)  │     │  Express API  │     │  数据库   │
 └─────────────┘     └──────────────┘     └──────────┘
-                            │
-                     ┌──────┴──────┐
-                     │  PC 管理端  │
-                     │  (静态页面) │
-                     └─────────────┘</code></pre>
+                           │
+                    ┌──────┴──────┐
+                    │  PC 管理端  │
+                    │  (静态页面) │
+                    └─────────────┘`
 
-    <h2>项目截图</h2>
+const codeSample = `// 工单创建 API — 自动关联客户 & 发送通知
+router.post('/', auth, async (req, res) => {
+  const { title, customer_name, content } = req.body
 
-    <h3 style="margin-bottom:0.75rem;color:var(--text-secondary);font-size:0.9rem;font-weight:600;letter-spacing:0.05em;text-transform:uppercase">小程序端</h3>
-    <div class="gallery">
-      <a href="/my-blog/images/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E7%99%BB%E5%BD%95%E7%95%8C%E9%9D%A2.PNG" target="_blank" class="gallery-item">
-        <img src="/my-blog/images/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E7%99%BB%E5%BD%95%E7%95%8C%E9%9D%A2.PNG" alt="小程序登录界面" loading="lazy" />
-        <div class="label">登录界面</div>
-      </a>
-      <a href="/my-blog/images/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E9%A6%96%E9%A1%B5.PNG" target="_blank" class="gallery-item">
-        <img src="/my-blog/images/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E9%A6%96%E9%A1%B5.PNG" alt="小程序首页" loading="lazy" />
-        <div class="label">首页</div>
-      </a>
-      <a href="/my-blog/images/%E5%B7%A5%E5%8D%95%E5%88%97%E8%A1%A8.PNG" target="_blank" class="gallery-item">
-        <img src="/my-blog/images/%E5%B7%A5%E5%8D%95%E5%88%97%E8%A1%A8.PNG" alt="工单列表" loading="lazy" />
-        <div class="label">工单列表</div>
-      </a>
-      <a href="/my-blog/images/%E5%B7%A5%E5%8D%95%E8%AF%A6%E6%83%85.PNG" target="_blank" class="gallery-item">
-        <img src="/my-blog/images/%E5%B7%A5%E5%8D%95%E8%AF%A6%E6%83%85.PNG" alt="工单详情" loading="lazy" />
-        <div class="label">工单详情</div>
-      </a>
-      <a href="/my-blog/images/%E5%AE%A2%E6%88%B7%E5%88%97%E8%A1%A8.PNG" target="_blank" class="gallery-item">
-        <img src="/my-blog/images/%E5%AE%A2%E6%88%B7%E5%88%97%E8%A1%A8.PNG" alt="客户列表" loading="lazy" />
-        <div class="label">客户列表</div>
-      </a>
-      <a href="/my-blog/images/%E5%AE%A2%E6%88%B7%E8%AF%A6%E6%83%85.PNG" target="_blank" class="gallery-item">
-        <img src="/my-blog/images/%E5%AE%A2%E6%88%B7%E8%AF%A6%E6%83%85.PNG" alt="客户详情" loading="lazy" />
-        <div class="label">客户详情</div>
-      </a>
-      <a href="/my-blog/images/%E6%95%B0%E6%8D%AE%E7%BB%9F%E8%AE%A1.PNG" target="_blank" class="gallery-item">
-        <img src="/my-blog/images/%E6%95%B0%E6%8D%AE%E7%BB%9F%E8%AE%A1.PNG" alt="数据统计" loading="lazy" />
-        <div class="label">数据统计</div>
-      </a>
-      <a href="/my-blog/images/%E6%B6%88%E6%81%AF%E5%88%97%E8%A1%A8.PNG" target="_blank" class="gallery-item">
-        <img src="/my-blog/images/%E6%B6%88%E6%81%AF%E5%88%97%E8%A1%A8.PNG" alt="消息列表" loading="lazy" />
-        <div class="label">消息列表</div>
-      </a>
-      <a href="/my-blog/images/%E4%B8%AA%E4%BA%BA%E4%B8%AD%E5%BF%83.PNG" target="_blank" class="gallery-item">
-        <img src="/my-blog/images/%E4%B8%AA%E4%BA%BA%E4%B8%AD%E5%BF%83.PNG" alt="个人中心" loading="lazy" />
-        <div class="label">个人中心</div>
-      </a>
-    </div>
+  // 客户自动匹配/创建
+  let customer = await db.get(
+    'SELECT id FROM customers WHERE name = ?', [customer_name]
+  )
+  if (!customer) {
+    const result = await db.run(
+      'INSERT INTO customers (name) VALUES (?)', [customer_name]
+    )
+    customer = { id: result.lastID }
+  }
 
-    <h3 style="margin:2rem 0 0.75rem;color:var(--text-secondary);font-size:0.9rem;font-weight:600;letter-spacing:0.05em;text-transform:uppercase">PC 后台管理</h3>
-    <div class="gallery">
-      <a href="/my-blog/images/PC%E5%90%8E%E5%8F%B0%E7%99%BB%E5%BD%95%E9%A1%B5.PNG" target="_blank" class="gallery-item">
-        <img src="/my-blog/images/PC%E5%90%8E%E5%8F%B0%E7%99%BB%E5%BD%95%E9%A1%B5.PNG" alt="PC后台登录页" loading="lazy" />
-        <div class="label">登录页</div>
-      </a>
-      <a href="/my-blog/images/PC%E5%90%8E%E5%8F%B0%E9%A6%96%E9%A1%B5.PNG" target="_blank" class="gallery-item">
-        <img src="/my-blog/images/PC%E5%90%8E%E5%8F%B0%E9%A6%96%E9%A1%B5.PNG" alt="PC后台首页" loading="lazy" />
-        <div class="label">首页看板</div>
-      </a>
-      <a href="/my-blog/images/PC%E5%90%8E%E5%8F%B0%E5%B7%A5%E5%8D%95%E5%88%97%E8%A1%A8.PNG" target="_blank" class="gallery-item">
-        <img src="/my-blog/images/PC%E5%90%8E%E5%8F%B0%E5%B7%A5%E5%8D%95%E5%88%97%E8%A1%A8.PNG" alt="PC后台工单列表" loading="lazy" />
-        <div class="label">工单列表</div>
-      </a>
-      <a href="/my-blog/images/PC%E5%90%8E%E5%8F%B0%E5%B7%A5%E5%8D%95%E8%AF%A6%E6%83%85.PNG" target="_blank" class="gallery-item">
-        <img src="/my-blog/images/PC%E5%90%8E%E5%8F%B0%E5%B7%A5%E5%8D%95%E8%AF%A6%E6%83%85.PNG" alt="PC后台工单详情" loading="lazy" />
-        <div class="label">工单详情</div>
-      </a>
-      <a href="/my-blog/images/PC%E5%90%8E%E5%8F%B0%E5%AE%A2%E6%88%B7%E5%88%97%E8%A1%A8.PNG" target="_blank" class="gallery-item">
-        <img src="/my-blog/images/PC%E5%90%8E%E5%8F%B0%E5%AE%A2%E6%88%B7%E5%88%97%E8%A1%A8.PNG" alt="PC后台客户列表" loading="lazy" />
-        <div class="label">客户列表</div>
-      </a>
-      <a href="/my-blog/images/PC%E5%90%8E%E5%8F%B0%E7%BB%B4%E6%8A%A4%E5%95%86%E5%88%97%E8%A1%A8.PNG" target="_blank" class="gallery-item">
-        <img src="/my-blog/images/PC%E5%90%8E%E5%8F%B0%E7%BB%B4%E6%8A%A4%E5%95%86%E5%88%97%E8%A1%A8.PNG" alt="PC后台维护商列表" loading="lazy" />
-        <div class="label">维护商列表</div>
-      </a>
-      <a href="/my-blog/images/PC%E5%90%8E%E5%8F%B0%E6%B6%88%E6%81%AF%E5%88%97%E8%A1%A8.PNG" target="_blank" class="gallery-item">
-        <img src="/my-blog/images/PC%E5%90%8E%E5%8F%B0%E6%B6%88%E6%81%AF%E5%88%97%E8%A1%A8.PNG" alt="PC后台消息列表" loading="lazy" />
-        <div class="label">消息列表</div>
-      </a>
-      <a href="/my-blog/images/PC%E5%90%8E%E5%8F%B0%E7%94%A8%E6%88%B7%E5%88%97%E8%A1%A8.PNG" target="_blank" class="gallery-item">
-        <img src="/my-blog/images/PC%E5%90%8E%E5%8F%B0%E7%94%A8%E6%88%B7%E5%88%97%E8%A1%A8.PNG" alt="PC后台用户列表" loading="lazy" />
-        <div class="label">用户列表</div>
-      </a>
-      <a href="/my-blog/images/PC%E5%90%8E%E5%8F%B0%E6%93%8D%E4%BD%9C%E6%97%A5%E5%BF%97.PNG" target="_blank" class="gallery-item">
-        <img src="/my-blog/images/PC%E5%90%8E%E5%8F%B0%E6%93%8D%E4%BD%9C%E6%97%A5%E5%BF%97.PNG" alt="PC后台操作日志" loading="lazy" />
-        <div class="label">操作日志</div>
-      </a>
-    </div>
+  // 创建工单
+  const orderId = await db.run(
+    'INSERT INTO orders (title, customer_id, content, status) VALUES (?,?,?,?)',
+    [title, customer.id, content, 'pending']
+  )
 
-    <h2>在线演示</h2>
-    <p style="color:var(--text-secondary);margin-bottom:1rem">
-      点击下方标签可切换手机端和管理后台预览。
-    </p>
-    <div class="prototype-frame">
-      <iframe
-        src="/my-blog/demos/sn-workorder-prototype.html"
-        title="SN 售后工单系统交互式演示"
-        style="width:100%;height:680px;border:none;border-radius:12px"
-        loading="lazy"
-      ></iframe>
-    </div>
-  </main>
+  // 自动推送微信服务通知
+  await sendTemplateMsg(assignee, { title, type: 'new_order' })
+
+  res.json({ code: 0, data: { id: orderId.lastID } })
+})`
+---
+
+<BaseLayout title="SN 售后工单系统 — Wang Saifeng">
+  <h1>SN 售后工单系统</h1>
+
+  <p style="color:var(--text-secondary)">
+    发布于 2025-08-11
+    &nbsp;&middot;&nbsp;
+    <a href="https://github.com/19559220516/sn-workorder" target="_blank">GitHub 源码</a>
+  </p>
+
+  <blockquote>
+    基于微信小程序的售后工单管理系统，涵盖工单全生命周期——从创建、分配、处理到完成，
+    配合 PC 管理后台实现高效运营。支持多角色协作，具备实时消息通知和数据统计分析。
+  </blockquote>
+
+  <h2>技术栈</h2>
+  <div class="skills">
+    <span class="skill-tag">微信小程序</span>
+    <span class="skill-tag">Node.js</span>
+    <span class="skill-tag">Express</span>
+    <span class="skill-tag">MySQL</span>
+    <span class="skill-tag">ECharts</span>
+    <span class="skill-tag">Docker</span>
+    <span class="skill-tag">JWT</span>
+  </div>
+
+  <h2>系统架构</h2>
+  <pre><code>{archDiagram}</code></pre>
+
+  <h2>核心功能</h2>
+  <ul>
+    <li><strong>工单管理</strong> — 创建、分配、转交、跟进、完成全流程，支持图片上传和费用记录</li>
+    <li><strong>客户管理</strong> — 客户信息维护，创建工单自动关联客户</li>
+    <li><strong>维护商管理</strong> — 第三方维护商信息与工单关联</li>
+    <li><strong>用户管理</strong> — 多角色权限（管理员/主管/工程师），实时在线状态</li>
+    <li><strong>数据看板</strong> — 工单统计、类型分布、趋势分析，ECharts 可视化</li>
+    <li><strong>消息通知</strong> — 站内消息系统，工单状态变更自动通知，15天自动清理</li>
+    <li><strong>通讯录</strong> — 用户列表在线状态显示，20秒实时刷新</li>
+    <li><strong>PC 后台</strong> — 独立管理端，支持批量操作、CSV 导出、数据筛选</li>
+  </ul>
+
+  <h2>代码示例</h2>
+  <pre><code>{codeSample}</code></pre>
+
+  <h2>技术亮点</h2>
+  <ul>
+    <li><strong>零配置部署</strong> — 数据库自动迁移，启动即建表，无需手动执行 SQL</li>
+    <li><strong>命令模式日志</strong> — 所有操作可追溯、可审计</li>
+    <li><strong>微信服务通知</strong> — 工单创建/转交/状态变更实时推送模板消息</li>
+    <li><strong>在线状态自动检测</strong> — onShow/onHide 防抖上报，15秒轮询刷新</li>
+    <li><strong>分包优化</strong> — 主包仅 3.6KB，页面加载速度提升 40%</li>
+  </ul>
+
+  <h2>项目截图</h2>
+
+  <h3>小程序端</h3>
+  <div class="gallery">
+    <a href="/my-blog/images/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E7%99%BB%E5%BD%95%E7%95%8C%E9%9D%A2.PNG" target="_blank" class="gallery-item">
+      <img src="/my-blog/images/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E7%99%BB%E5%BD%95%E7%95%8C%E9%9D%A2.PNG" alt="小程序登录界面" loading="lazy" />
+      <div class="label">登录界面</div>
+    </a>
+    <a href="/my-blog/images/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E9%A6%96%E9%A1%B5.PNG" target="_blank" class="gallery-item">
+      <img src="/my-blog/images/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E9%A6%96%E9%A1%B5.PNG" alt="小程序首页" loading="lazy" />
+      <div class="label">首页</div>
+    </a>
+    <a href="/my-blog/images/%E5%B7%A5%E5%8D%95%E5%88%97%E8%A1%A8.PNG" target="_blank" class="gallery-item">
+      <img src="/my-blog/images/%E5%B7%A5%E5%8D%95%E5%88%97%E8%A1%A8.PNG" alt="工单列表" loading="lazy" />
+      <div class="label">工单列表</div>
+    </a>
+    <a href="/my-blog/images/%E5%B7%A5%E5%8D%95%E8%AF%A6%E6%83%85.PNG" target="_blank" class="gallery-item">
+      <img src="/my-blog/images/%E5%B7%A5%E5%8D%95%E8%AF%A6%E6%83%85.PNG" alt="工单详情" loading="lazy" />
+      <div class="label">工单详情</div>
+    </a>
+    <a href="/my-blog/images/%E5%AE%A2%E6%88%B7%E5%88%97%E8%A1%A8.PNG" target="_blank" class="gallery-item">
+      <img src="/my-blog/images/%E5%AE%A2%E6%88%B7%E5%88%97%E8%A1%A8.PNG" alt="客户列表" loading="lazy" />
+      <div class="label">客户列表</div>
+    </a>
+    <a href="/my-blog/images/%E5%AE%A2%E6%88%B7%E8%AF%A6%E6%83%85.PNG" target="_blank" class="gallery-item">
+      <img src="/my-blog/images/%E5%AE%A2%E6%88%B7%E8%AF%A6%E6%83%85.PNG" alt="客户详情" loading="lazy" />
+      <div class="label">客户详情</div>
+    </a>
+    <a href="/my-blog/images/%E6%95%B0%E6%8D%AE%E7%BB%9F%E8%AE%A1.PNG" target="_blank" class="gallery-item">
+      <img src="/my-blog/images/%E6%95%B0%E6%8D%AE%E7%BB%9F%E8%AE%A1.PNG" alt="数据统计" loading="lazy" />
+      <div class="label">数据统计</div>
+    </a>
+    <a href="/my-blog/images/%E6%B6%88%E6%81%AF%E5%88%97%E8%A1%A8.PNG" target="_blank" class="gallery-item">
+      <img src="/my-blog/images/%E6%B6%88%E6%81%AF%E5%88%97%E8%A1%A8.PNG" alt="消息列表" loading="lazy" />
+      <div class="label">消息列表</div>
+    </a>
+    <a href="/my-blog/images/%E4%B8%AA%E4%BA%BA%E4%B8%AD%E5%BF%83.PNG" target="_blank" class="gallery-item">
+      <img src="/my-blog/images/%E4%B8%AA%E4%BA%BA%E4%B8%AD%E5%BF%83.PNG" alt="个人中心" loading="lazy" />
+      <div class="label">个人中心</div>
+    </a>
+  </div>
+
+  <h3>PC 后台管理</h3>
+  <div class="gallery">
+    <a href="/my-blog/images/PC%E5%90%8E%E5%8F%B0%E7%99%BB%E5%BD%95%E9%A1%B5.PNG" target="_blank" class="gallery-item">
+      <img src="/my-blog/images/PC%E5%90%8E%E5%8F%B0%E7%99%BB%E5%BD%95%E9%A1%B5.PNG" alt="PC后台登录页" loading="lazy" />
+      <div class="label">登录页</div>
+    </a>
+    <a href="/my-blog/images/PC%E5%90%8E%E5%8F%B0%E9%A6%96%E9%A1%B5.PNG" target="_blank" class="gallery-item">
+      <img src="/my-blog/images/PC%E5%90%8E%E5%8F%B0%E9%A6%96%E9%A1%B5.PNG" alt="PC后台首页" loading="lazy" />
+      <div class="label">首页看板</div>
+    </a>
+    <a href="/my-blog/images/PC%E5%90%8E%E5%8F%B0%E5%B7%A5%E5%8D%95%E5%88%97%E8%A1%A8.PNG" target="_blank" class="gallery-item">
+      <img src="/my-blog/images/PC%E5%90%8E%E5%8F%B0%E5%B7%A5%E5%8D%95%E5%88%97%E8%A1%A8.PNG" alt="PC后台工单列表" loading="lazy" />
+      <div class="label">工单列表</div>
+    </a>
+    <a href="/my-blog/images/PC%E5%90%8E%E5%8F%B0%E5%B7%A5%E5%8D%95%E8%AF%A6%E6%83%85.PNG" target="_blank" class="gallery-item">
+      <img src="/my-blog/images/PC%E5%90%8E%E5%8F%B0%E5%B7%A5%E5%8D%95%E8%AF%A6%E6%83%85.PNG" alt="PC后台工单详情" loading="lazy" />
+      <div class="label">工单详情</div>
+    </a>
+    <a href="/my-blog/images/PC%E5%90%8E%E5%8F%B0%E5%AE%A2%E6%88%B7%E5%88%97%E8%A1%A8.PNG" target="_blank" class="gallery-item">
+      <img src="/my-blog/images/PC%E5%90%8E%E5%8F%B0%E5%AE%A2%E6%88%B7%E5%88%97%E8%A1%A8.PNG" alt="PC后台客户列表" loading="lazy" />
+      <div class="label">客户列表</div>
+    </a>
+    <a href="/my-blog/images/PC%E5%90%8E%E5%8F%B0%E7%BB%B4%E6%8A%A4%E5%95%86%E5%88%97%E8%A1%A8.PNG" target="_blank" class="gallery-item">
+      <img src="/my-blog/images/PC%E5%90%8E%E5%8F%B0%E7%BB%B4%E6%8A%A4%E5%95%86%E5%88%97%E8%A1%A8.PNG" alt="PC后台维护商列表" loading="lazy" />
+      <div class="label">维护商列表</div>
+    </a>
+    <a href="/my-blog/images/PC%E5%90%8E%E5%8F%B0%E6%B6%88%E6%81%AF%E5%88%97%E8%A1%A8.PNG" target="_blank" class="gallery-item">
+      <img src="/my-blog/images/PC%E5%90%8E%E5%8F%B0%E6%B6%88%E6%81%AF%E5%88%97%E8%A1%A8.PNG" alt="PC后台消息列表" loading="lazy" />
+      <div class="label">消息列表</div>
+    </a>
+    <a href="/my-blog/images/PC%E5%90%8E%E5%8F%B0%E7%94%A8%E6%88%B7%E5%88%97%E8%A1%A8.PNG" target="_blank" class="gallery-item">
+      <img src="/my-blog/images/PC%E5%90%8E%E5%8F%B0%E7%94%A8%E6%88%B7%E5%88%97%E8%A1%A8.PNG" alt="PC后台用户列表" loading="lazy" />
+      <div class="label">用户列表</div>
+    </a>
+    <a href="/my-blog/images/PC%E5%90%8E%E5%8F%B0%E6%93%8D%E4%BD%9C%E6%97%A5%E5%BF%97.PNG" target="_blank" class="gallery-item">
+      <img src="/my-blog/images/PC%E5%90%8E%E5%8F%B0%E6%93%8D%E4%BD%9C%E6%97%A5%E5%BF%97.PNG" alt="PC后台操作日志" loading="lazy" />
+      <div class="label">操作日志</div>
+    </a>
+  </div>
+
+  <h2>在线演示</h2>
+  <p style="color:var(--text-secondary);margin-bottom:1rem">
+    点击下方标签可切换手机端和管理后台预览。
+  </p>
+  <div class="prototype-frame">
+    <iframe
+      src="/my-blog/demos/sn-workorder-prototype.html"
+      title="SN 售后工单系统交互式演示"
+      style="width:100%;height:680px;border:none;border-radius:8px"
+      loading="lazy"
+    ></iframe>
+  </div>
 </BaseLayout>

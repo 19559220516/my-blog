@@ -2,42 +2,61 @@
 import BaseLayout from '../layouts/BaseLayout.astro'
 ---
 
-<BaseLayout title="YOURSITE — 个人博客" description="记录项目与技术思考的个人站点">
-  <main>
-    <section class="hero">
-      <h1>王赛枫</h1>
-      <p>全栈开发者，专注于微信小程序、Node.js 和前端工程化。</p>
-      <div class="skills">
-        <span class="skill-tag">微信小程序</span>
-        <span class="skill-tag">Node.js</span>
-        <span class="skill-tag">Express</span>
-        <span class="skill-tag">MySQL</span>
-        <span class="skill-tag">JavaScript</span>
-        <span class="skill-tag">HTML/CSS</span>
-        <span class="skill-tag">Git</span>
-        <span class="skill-tag">Docker</span>
-      </div>
-    </section>
+<BaseLayout title="王赛枫的技术博客" description="王赛枫的技术博客 — 全栈开发者，记录项目与技术思考">
+  <h1>王赛枫</h1>
 
-    <section>
-      <h2>项目</h2>
+  <blockquote>
+    全栈开发者，专注于微信小程序、Node.js 和前端工程化。
+    热衷于用技术解决实际问题，追求代码质量和用户体验。
+  </blockquote>
 
-      <a href="/my-blog/projects/sn-workorder" class="project-card">
-        <h3>SN 售后工单系统</h3>
-        <p>基于微信小程序的售后工单全流程管理系统，支持工单创建/分配/跟踪、客户管理、数据看板，配套 PC 后台管理端。</p>
-        <div class="tags">
-          <span class="tag">微信小程序</span>
-          <span class="tag">Node.js</span>
-          <span class="tag">Express</span>
-          <span class="tag">MySQL</span>
-          <span class="tag">ECharts</span>
-        </div>
-      </a>
+  <h2>技术栈</h2>
+  <div class="skills">
+    <span class="skill-tag">微信小程序</span>
+    <span class="skill-tag">Node.js</span>
+    <span class="skill-tag">Express</span>
+    <span class="skill-tag">MySQL</span>
+    <span class="skill-tag">JavaScript</span>
+    <span class="skill-tag">HTML/CSS</span>
+    <span class="skill-tag">Git</span>
+    <span class="skill-tag">Docker</span>
+    <span class="skill-tag">Nginx</span>
+  </div>
 
-      <div class="project-card" style="opacity:0.5">
-        <h3>更多项目即将添加</h3>
-        <p>这里将会展示更多作品</p>
-      </div>
-    </section>
-  </main>
+  <h2>精选项目</h2>
+
+  <a href="/my-blog/projects/sn-workorder/" class="doc-card">
+    <h3>SN 售后工单系统 <span class="arrow">&rarr;</span></h3>
+    <p>基于微信小程序的售后工单全流程管理系统，支持工单创建/分配/跟踪、客户管理、数据看板，配套 PC 后台管理端。</p>
+    <div class="doc-tags">
+      <span class="doc-tag">微信小程序</span>
+      <span class="doc-tag">Node.js</span>
+      <span class="doc-tag">Express</span>
+      <span class="doc-tag">MySQL</span>
+      <span class="doc-tag">ECharts</span>
+    </div>
+    <div class="doc-code-preview">
+      <pre><code>// 系统架构概览
+微信小程序 ──▶ Node.js/Express API ──▶ MySQL 数据库
+                      │
+               ┌──────┴──────┐
+               │  PC 管理端  │
+               └─────────────┘</code></pre>
+    </div>
+  </a>
+
+  <div class="doc-card" style="opacity:0.45; pointer-events:none;">
+    <h3>更多项目即将添加</h3>
+    <p>后续将陆续整理更多项目文档和技术文章。</p>
+    <div class="doc-tags">
+      <span class="doc-tag">Coming Soon</span>
+    </div>
+  </div>
+
+  <h2>关于本站</h2>
+  <p>
+    使用 <a href="https://astro.build" target="_blank">Astro</a> 构建，
+    风格参考 VitePress 文档站，支持亮色/暗色双主题切换。
+    用于沉淀项目文档与技术笔记。
+  </p>
 </BaseLayout>
