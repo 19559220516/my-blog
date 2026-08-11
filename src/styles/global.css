@@ -621,47 +621,49 @@ pre code {
 
 /* ===== Hero Banner (首页全屏固定背景) ===== */
 .hero-banner {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 0;
-  background: url('/my-blog/images/hero-bg.jpg') center/cover no-repeat;
-  background-attachment: fixed;
-}
-
-.hero-banner::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: rgba(15, 23, 42, 0.75);
-  z-index: 1;
-}
-
-.hero-banner::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  background: linear-gradient(
-    180deg,
-    rgba(15, 23, 42, 0.3) 0%,
-    rgba(15, 23, 42, 0.6) 50%,
-    rgba(15, 23, 42, 0.85) 100%
-  );
-}
-
-.hero-overlay {
   position: relative;
-  z-index: 3;
+  margin: -3rem calc(-1 * var(--content-px)) 0;
+  width: calc(100% + var(--content-px) * 2);
+  min-height: 380px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
   padding: 2rem;
-  min-height: 380px;
+}
+
+.hero-banner::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: -1;
+  background: url('/my-blog/images/hero-bg.jpg') center/cover no-repeat;
+  background-attachment: fixed;
+}
+
+.hero-banner::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: -1;
+  background: linear-gradient(
+    180deg,
+    rgba(15, 23, 42, 0.55) 0%,
+    rgba(15, 23, 42, 0.7) 50%,
+    rgba(15, 23, 42, 0.88) 100%
+  );
+}
+
+.hero-overlay {
+  position: relative;
+  z-index: 1;
 }
 
 .hero-overlay h1 {
@@ -679,7 +681,7 @@ pre code {
   color: rgba(255,255,255,0.92);
   font-size: 0.95rem;
   max-width: 480px;
-  margin: 0;
+  margin: 0 auto;
   backdrop-filter: blur(6px);
   border-radius: 0 6px 6px 0;
 }
@@ -694,7 +696,7 @@ pre code {
 /* 首页中 hero 下方的所有内容块：背景色 */
 .main-content.home-page .content-block {
   position: relative;
-  z-index: 3;
+  z-index: 1;
   background: var(--bg);
   padding: 2rem var(--content-px);
   margin: 0 calc(-1 * var(--content-px));
@@ -712,7 +714,7 @@ pre code {
 /* 首页 footer 需要背景 */
 .main-content.home-page .content-footer {
   position: relative;
-  z-index: 3;
+  z-index: 1;
   background: var(--bg);
   padding: 1.25rem var(--content-px) 2rem;
   margin: 0 calc(-1 * var(--content-px));
@@ -720,7 +722,8 @@ pre code {
 }
 
 @media (max-width: 768px) {
-  .hero-overlay {
+  .hero-banner {
+    margin: -3.5rem calc(-1 * var(--content-px)) 0;
     min-height: 300px;
   }
   .hero-overlay h1 {
