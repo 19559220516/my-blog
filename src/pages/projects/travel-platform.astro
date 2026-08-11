@@ -1,0 +1,164 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro'
+
+const archDiagram = `┌──────────────────┐     ┌───────────────────────┐     ┌──────────┐
+│  Vue 3 + Vite     │────▶│  Django REST Framework │────▶│  MySQL    │
+│  + Element Plus   │     │  + JWT 认证             │     │  数据库   │
+│  + Three.js       │     └───────────────────────┘     └──────────┘
+└──────────────────┘                │
+                          ┌─────────┴─────────┐
+                          │                   │
+                    ┌─────┴─────┐     ┌──────┴──────┐
+                    │  DeepSeek  │     │  知识图谱    │
+                    │  AI 引擎   │     │  推荐系统    │
+                    └───────────┘     └─────────────┘`
+
+const codeSample = `# Django REST Framework — 智能路线规划 API
+# serializers.py
+class RoutePlanSerializer(serializers.ModelSerializer):
+    spots = ScenicSpotSerializer(many=True, read_only=True)
+    
+    class Meta:
+        model = RoutePlan
+        fields = ['id', 'name', 'days', 'spots', 'preferences', 'created_at']
+
+# views.py  
+class RoutePlanViewSet(viewsets.ModelViewSet):
+    serializer_class = RoutePlanSerializer
+    permission_classes = [IsAuthenticated]
+    
+    def perform_create(self, serializer):
+        # AI 智能生成路线
+        preferences = self.request.data.get('preferences', {})
+        spots = ScenicSpot.objects.filter(
+            category__in=preferences.get('interests', [])
+        )
+        ai_route = ai_service.generate_route(
+            spots=list(spots.values()),
+            days=preferences.get('days', 3)
+        )
+        serializer.save(user=self.request.user, route_data=ai_route)`
+---
+
+<BaseLayout title="智能化在线旅游平台 — Smart Travel Platform — Wang Saifeng">
+  <h1>智能化在线旅游平台 <span style="font-size:1.1rem;color:var(--text-muted);font-weight:400;">Smart Travel Platform</span></h1>
+
+  <p style="color:var(--text-secondary)">
+    发布于 2025-08-11
+    &nbsp;&middot;&nbsp;
+    <a href="https://github.com/19559220516/travel-platform" target="_blank">GitHub 源码</a>
+  </p>
+
+  <blockquote>
+    基于 AI 的全栈智能化在线旅游平台，集酒店/机票预订、景点导览、智能行程规划、
+    AI 实时伴旅、家庭共享等功能于一体，旨在为用户提供一站式的智能旅行体验。
+  </blockquote>
+
+  <h2>技术架构</h2>
+  <div class="tech-table">
+    <table>
+      <thead><tr><th>层级</th><th>技术栈</th></tr></thead>
+      <tbody>
+        <tr><td><strong>后端</strong></td><td>Django 4.2 + Django REST Framework + MySQL + JWT 认证</td></tr>
+        <tr><td><strong>前端</strong></td><td>Vue 3 + Vite + Element Plus + Three.js + Pinia</td></tr>
+        <tr><td><strong>AI</strong></td><td>DeepSeek 大语言模型</td></tr>
+        <tr><td><strong>3D 导览</strong></td><td>Three.js 实现沉浸式数字导览</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>系统架构</h2>
+  <pre><code>{archDiagram}</code></pre>
+
+  <h2>核心功能模块（14个）</h2>
+  <ul>
+    <li><strong>用户系统</strong> — 注册/登录、JWT 鉴权、个人中心、收藏管理</li>
+    <li><strong>酒店预订</strong> — 酒店搜索、详情浏览、在线预订</li>
+    <li><strong>机票预订</strong> — 航班搜索、详情查看、在线购买</li>
+    <li><strong>订单管理</strong> — 订单列表、详情、状态跟踪</li>
+    <li><strong>景点导览</strong> — 景点展示 + 3D 数字导览（Three.js）</li>
+    <li><strong>AI 智能问答</strong> — 基于 DeepSeek 的 7x24 旅游智能助手</li>
+    <li><strong>知识图谱</strong> — 旅游知识图谱 + 个性化推荐</li>
+    <li><strong>智能路线规划</strong> — 根据偏好自动生成旅行路线</li>
+    <li><strong>AI 实时伴旅</strong> — 行程中的 AI 伴侣，实时提供建议</li>
+    <li><strong>旅程故事报告</strong> — 自动生成图文旅程回顾报告</li>
+    <li><strong>旅伴匹配</strong> — 寻找志同道合的旅行伙伴</li>
+    <li><strong>家庭共享</strong> — 家庭成员行程共享与协作</li>
+    <li><strong>数据分析</strong> — 用户行为分析与统计</li>
+    <li><strong>系统设置</strong> — 平台参数灵活配置</li>
+  </ul>
+
+  <h2>代码示例</h2>
+  <pre><code>{codeSample}</code></pre>
+
+  <h2>项目亮点</h2>
+  <ul>
+    <li><strong>AI 全链路赋能</strong> — 从出行前的智能推荐、路线规划，到旅途中的实时伴游、AI 问答，再到行程后的旅程报告，AI 贯穿整个旅行生命周期</li>
+    <li><strong>3D 沉浸体验</strong> — 基于 Three.js 实现景点 3D 数字导览，让用户提前"身临其境"</li>
+    <li><strong>家庭共享协作</strong> — 支持家庭成员间行程共享、实时协作，解决多人出行协调难题</li>
+    <li><strong>知识图谱驱动</strong> — 构建旅游领域知识图谱，实现精准个性化推荐</li>
+    <li><strong>前后端分离</strong> — RESTful API 设计，JWT 鉴权，接口规范清晰</li>
+    <li><strong>敏感信息安全</strong> — 环境变量分离，.gitignore 配置完善</li>
+  </ul>
+
+  <h2>项目结构</h2>
+  <pre><code>travel-platform/
+├── backend/                # Django + DRF 后端 API
+│   ├── manage.py           # Django 管理入口
+│   ├── requirements.txt    # Python 依赖
+│   └── ...
+├── frontend/               # Vue 3 + Vite 前端 SPA
+│   ├── src/
+│   │   ├── views/          # 页面组件
+│   │   ├── components/     # 公共组件
+│   │   ├── router/         # Vue Router 路由
+│   │   ├── stores/         # Pinia 状态管理
+│   │   └── api/            # API 请求封装
+│   └── package.json
+└── picture/                # 项目截图与设计稿</code></pre>
+
+  <h2>开发环境</h2>
+  <pre><code># 后端
+cd backend
+pip install -r requirements.txt
+python manage.py runserver
+
+# 前端
+cd frontend
+npm install
+npm run dev</code></pre>
+
+  <h2>开源地址</h2>
+  <p>
+    <a href="https://github.com/19559220516/travel-platform" target="_blank" style="font-size:1.05rem;">
+      🔗 GitHub - travel-platform &rarr;
+    </a>
+  </p>
+</BaseLayout>
+
+<style>
+  .tech-table table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0.5rem 0 1rem;
+  }
+  .tech-table th, .tech-table td {
+    padding: 0.5rem 0.8rem;
+    text-align: left;
+    border: 1px solid var(--border);
+    font-size: 0.9rem;
+  }
+  .tech-table th {
+    background: var(--bg-code);
+    color: var(--text);
+    font-weight: 600;
+  }
+  .tech-table td {
+    color: var(--text-secondary);
+  }
+  .tech-table td:first-child {
+    white-space: nowrap;
+    color: var(--text);
+    font-weight: 500;
+  }
+</style>

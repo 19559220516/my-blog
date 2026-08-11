@@ -5,47 +5,47 @@
 
 /* ===== CSS Variables: 亮色主题 ===== */
 :root {
-  /* 背景 */
+  /* 背景 — 侧边栏浅灰，主区纯白 */
   --bg:            #ffffff;
-  --bg-sidebar:    #f6f7f9;
-  --bg-code:       #f4f5f7;
-  --bg-inline-code:#edf0f4;
-  --bg-card:       #fafbfc;
+  --bg-sidebar:    #e6e8ec;
+  --bg-code:       #f7f8fa;
+  --bg-inline-code:#eef0f3;
+  --bg-card:       #f8f9fb;
 
-  /* 文字 */
-  --text:          #1a1a1a;
-  --text-secondary:#6b7280;
-  --text-muted:    #9ca3af;
+  /* 文字 — 深灰柔和，比纯黑更高级 */
+  --text:          #1e293b;
+  --text-secondary:#64748b;
+  --text-muted:    #94a3b8;
 
-  /* 品牌色 — VitePress 蓝 */
-  --brand:         #3451b2;
-  --brand-light:   #3a5ccc;
-  --brand-bg:      #eef1ff;
+  /* 品牌色 — 石板灰，不再用蓝紫，沉稳低调 */
+  --brand:         #475569;
+  --brand-light:   #334155;
+  --brand-bg:      #f0f2f5;
 
   /* 边框 / 分割 */
-  --border:        #e5e7eb;
-  --border-light:  #f3f4f6;
-  --divider:       #e5e7eb;
+  --border:        #e2e8f0;
+  --border-light:  #f1f5f9;
+  --divider:       #e2e8f0;
 
   /* 侧边栏 */
-  --sidebar-text:        #374151;
-  --sidebar-text-active: var(--brand);
-  --sidebar-hover-bg:    #e9eaed;
-  --sidebar-active-bar:  var(--brand);
+  --sidebar-text:        #475569;
+  --sidebar-text-active: #1e293b;
+  --sidebar-hover-bg:    #e4e7eb;
+  --sidebar-active-bar:  #475569;
 
-  /* 代码高亮 (亮) */
-  --code-text:     #24292f;
-  --code-comment:  #6e7781;
-  --code-keyword:  #cf222e;
-  --code-string:   #0a3069;
-  --code-function: #8250df;
-  --code-number:   #0550ae;
-  --code-tag:      #116329;
+  /* 代码 — GitHub 柔和配色 */
+  --code-text:     #334155;
+  --code-comment:  #94a3b8;
+  --code-keyword:  #b45309;
+  --code-string:   #0f766e;
+  --code-function: #6d28d9;
+  --code-number:   #0369a1;
+  --code-tag:      #15803d;
 
-  /* 阴影 — 极克制 */
+  /* 阴影 */
   --shadow-xs: 0 1px 2px rgba(0,0,0,0.04);
 
-  /* 间距体系 */
+  /* 间距 */
   --sidebar-w:    260px;
   --content-px:   2.5rem;
   --content-max:  780px;
@@ -53,44 +53,43 @@
   --radius:       8px;
   --radius-lg:    12px;
 
-  /* 过渡 */
   --transition: 0.15s ease;
 }
 
 /* ===== CSS Variables: 暗色主题 ===== */
 .dark {
-  --bg:            #1e1e1e;
-  --bg-sidebar:    #252529;
-  --bg-code:       #282c34;
-  --bg-inline-code:#2d3038;
-  --bg-card:       #282a2e;
+  --bg:            #1a1b1e;
+  --bg-sidebar:    #222326;
+  --bg-code:       #26282c;
+  --bg-inline-code:#2c2e33;
+  --bg-card:       #26282c;
 
-  --text:          #e5e7eb;
-  --text-secondary:#9ca3af;
-  --text-muted:    #6b7280;
+  --text:          #e4e4e7;
+  --text-secondary:#a1a1aa;
+  --text-muted:    #71717a;
 
-  --brand:         #a8b1ff;
-  --brand-light:   #c4caff;
-  --brand-bg:      #252642;
+  --brand:         #94a3b8;
+  --brand-light:   #cbd5e1;
+  --brand-bg:      #1e293b;
 
-  --border:        #3a3a3a;
-  --border-light:  #2d2d2d;
-  --divider:       #3a3a3a;
+  --border:        #3f3f46;
+  --border-light:  #2d2d30;
+  --divider:       #3f3f46;
 
-  --sidebar-text:        #cdcdcd;
-  --sidebar-text-active: var(--brand);
+  --sidebar-text:        #a1a1aa;
+  --sidebar-text-active: #e4e4e7;
   --sidebar-hover-bg:    #2e2e33;
-  --sidebar-active-bar:  var(--brand);
+  --sidebar-active-bar:  #94a3b8;
 
-  --code-text:     #abb2bf;
-  --code-comment:  #5c6370;
-  --code-keyword:  #c678dd;
-  --code-string:   #98c379;
-  --code-function: #61afef;
-  --code-number:   #d19a66;
-  --code-tag:      #e06c75;
+  --code-text:     #cbd5e1;
+  --code-comment:  #64748b;
+  --code-keyword:  #f0a36b;
+  --code-string:   #8bc48b;
+  --code-function: #a5b4fc;
+  --code-number:   #f2c878;
+  --code-tag:      #f78c8c;
 
-  --shadow-xs: 0 1px 2px rgba(0,0,0,0.2);
+  --shadow-xs: 0 1px 2px rgba(0,0,0,0.3);
 }
 
 /* ===== Reset & Base ===== */
