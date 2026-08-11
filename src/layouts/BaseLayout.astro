@@ -1,7 +1,7 @@
 ---
 import '../styles/global.css'
 
-const { title, description } = Astro.props
+const { title, description, bodyClass = '' } = Astro.props
 const currentPath = Astro.url.pathname.replace(/\/$/, '')
 ---
 
@@ -97,7 +97,7 @@ const currentPath = Astro.url.pathname.replace(/\/$/, '')
     </aside>
 
     <!-- ======== 右侧主内容 ======== -->
-    <main class="main-content" id="main-content">
+    <main class={`main-content ${bodyClass}`} id="main-content">
       <slot />
 
       <footer class="content-footer">

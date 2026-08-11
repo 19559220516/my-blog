@@ -2,7 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro'
 ---
 
-<BaseLayout title="王赛枫的技术博客" description="王赛枫的技术博客 — 全栈开发者，记录项目与技术思考">
+<BaseLayout title="王赛枫的技术博客" description="王赛枫的技术博客 — 全栈开发者，记录项目与技术思考" bodyClass="home-page">
   <!-- Hero 背景区域 -->
   <div class="hero-banner">
     <div class="hero-overlay">
@@ -14,79 +14,86 @@ import BaseLayout from '../layouts/BaseLayout.astro'
     </div>
   </div>
 
-  <h2>自我介绍</h2>
-  <p>
-    具备前后端全栈开发能力。前端以 Vue 3 生态为主，熟悉组件化开发与状态管理；后端使用 Django + DRF 和 Node.js + Express 双栈，能够独立完成从数据库建模到 RESTful API 设计的全流程。
-  </p>
-  <p>
-    微信小程序方面有完整的项目落地经验，涵盖分包加载、云开发、服务通知等场景；同时具备 Docker 容器化部署、Nginx 反向代理等运维能力。
-  </p>
-
-
-  <h2>技术栈</h2>
-  <div class="skills">
-    <span class="skill-tag">Vue 3</span>
-    <span class="skill-tag">Django</span>
-    <span class="skill-tag">微信小程序</span>
-    <span class="skill-tag">Node.js</span>
-    <span class="skill-tag">Express</span>
-    <span class="skill-tag">MySQL</span>
-    <span class="skill-tag">JavaScript</span>
-    <span class="skill-tag">Docker</span>
-    <span class="skill-tag">Nginx</span>
+  <div class="content-block">
+    <h2>自我介绍</h2>
+    <p>
+      具备前后端全栈开发能力。前端以 Vue 3 生态为主，熟悉组件化开发与状态管理；后端使用 Django + DRF 和 Node.js + Express 双栈，能够独立完成从数据库建模到 RESTful API 设计的全流程。
+    </p>
+    <p>
+      微信小程序方面有完整的项目落地经验，涵盖分包加载、云开发、服务通知等场景；同时具备 Docker 容器化部署、Nginx 反向代理等运维能力。
+    </p>
   </div>
 
-  <h2>精选项目</h2>
-
-  <a href="/my-blog/projects/sn-workorder/" class="doc-card">
-    <h3>SN 售后工单系统 <span class="arrow">&rarr;</span></h3>
-    <p>基于微信小程序的售后工单全流程管理系统，支持工单创建/分配/跟踪、客户管理、数据看板，配套 PC 后台管理端。</p>
-    <div class="doc-tags">
-      <span class="doc-tag">微信小程序</span>
-      <span class="doc-tag">Node.js</span>
-      <span class="doc-tag">Express</span>
-      <span class="doc-tag">MySQL</span>
-      <span class="doc-tag">ECharts</span>
+  <div class="content-block">
+    <h2>技术栈</h2>
+    <div class="skills">
+      <span class="skill-tag">Vue 3</span>
+      <span class="skill-tag">Django</span>
+      <span class="skill-tag">微信小程序</span>
+      <span class="skill-tag">Node.js</span>
+      <span class="skill-tag">Express</span>
+      <span class="skill-tag">MySQL</span>
+      <span class="skill-tag">JavaScript</span>
+      <span class="skill-tag">Docker</span>
+      <span class="skill-tag">Nginx</span>
     </div>
-    <div class="doc-code-preview">
-      <pre><code>// 系统架构概览
+  </div>
+
+  <div class="content-block">
+    <h2>精选项目</h2>
+
+    <a href="/my-blog/projects/sn-workorder/" class="doc-card">
+      <h3>SN 售后工单系统 <span class="arrow">&rarr;</span></h3>
+      <p>基于微信小程序的售后工单全流程管理系统，支持工单创建/分配/跟踪、客户管理、数据看板，配套 PC 后台管理端。</p>
+      <div class="doc-tags">
+        <span class="doc-tag">微信小程序</span>
+        <span class="doc-tag">Node.js</span>
+        <span class="doc-tag">Express</span>
+        <span class="doc-tag">MySQL</span>
+        <span class="doc-tag">ECharts</span>
+      </div>
+      <div class="doc-code-preview">
+        <pre><code>// 系统架构概览
 微信小程序 ──▶ Node.js/Express API ──▶ MySQL 数据库
                       │
                ┌──────┴──────┐
                │  PC 管理端  │
                └─────────────┘</code></pre>
-    </div>
-  </a>
+      </div>
+    </a>
 
-  <a href="/my-blog/projects/travel-platform/" class="doc-card">
-    <h3>智能化在线旅游平台 <span class="arrow">&rarr;</span></h3>
-    <p>基于 AI 的全栈旅游平台，集酒店/机票预订、景点 3D 导览、AI 智能伴旅、知识图谱推荐、家庭共享等功能于一体。</p>
-    <div class="doc-tags">
-      <span class="doc-tag">Vue 3</span>
-      <span class="doc-tag">Django</span>
-      <span class="doc-tag">DeepSeek AI</span>
-      <span class="doc-tag">Three.js</span>
-      <span class="doc-tag">MySQL</span>
-    </div>
-    <div class="doc-code-preview">
-      <pre><code>// 14 个核心功能模块
+    <a href="/my-blog/projects/travel-platform/" class="doc-card">
+      <h3>智能化在线旅游平台 <span class="arrow">&rarr;</span></h3>
+      <p>基于 AI 的全栈旅游平台，集酒店/机票预订、景点 3D 导览、AI 智能伴旅、知识图谱推荐、家庭共享等功能于一体。</p>
+      <div class="doc-tags">
+        <span class="doc-tag">Vue 3</span>
+        <span class="doc-tag">Django</span>
+        <span class="doc-tag">DeepSeek AI</span>
+        <span class="doc-tag">Three.js</span>
+        <span class="doc-tag">MySQL</span>
+      </div>
+      <div class="doc-code-preview">
+        <pre><code>// 14 个核心功能模块
 用户系统 · 酒店/机票预订 · 订单管理 · 景点 3D 导览
 AI 智能问答 · 知识图谱推荐 · 智能路线规划
 AI 实时伴旅 · 旅程故事报告 · 旅伴匹配 · 家庭共享</code></pre>
-    </div>
-  </a>
+      </div>
+    </a>
 
-  <div class="doc-card" style="opacity:0.45; pointer-events:none;">
-    <h3>更多项目即将添加</h3>
-    <p>后续将陆续整理更多项目文档和技术文章。</p>
-    <div class="doc-tags">
-      <span class="doc-tag">Coming Soon</span>
+    <div class="doc-card" style="opacity:0.45; pointer-events:none;">
+      <h3>更多项目即将添加</h3>
+      <p>后续将陆续整理更多项目文档和技术文章。</p>
+      <div class="doc-tags">
+        <span class="doc-tag">Coming Soon</span>
+      </div>
     </div>
   </div>
 
-  <h2>关于本站</h2>
-  <p>
-    使用 <a href="https://astro.build" target="_blank">Astro</a> 构建的文档风格个人站点，
-    用于沉淀项目文档与技术笔记，支持亮色/暗色双主题。
-  </p>
+  <div class="content-block">
+    <h2>关于本站</h2>
+    <p>
+      使用 <a href="https://astro.build" target="_blank">Astro</a> 构建的文档风格个人站点，
+      用于沉淀项目文档与技术笔记，支持亮色/暗色双主题。
+    </p>
+  </div>
 </BaseLayout>
