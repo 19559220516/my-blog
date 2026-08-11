@@ -618,3 +618,65 @@ pre code {
   font-weight: 500;
 }
 .skip-link:focus { top: 0.5rem; }
+
+/* ===== Hero Banner (首页背景图) ===== */
+.hero-banner {
+  position: relative;
+  margin: -3rem calc(-1 * var(--content-px)) 2.5rem;
+  width: calc(100% + var(--content-px) * 2);
+  height: 380px;
+  background: url('/my-blog/images/hero-bg.jpg') center/cover no-repeat;
+  border-radius: 0;
+  overflow: hidden;
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(15, 23, 42, 0.65) 0%,
+    rgba(15, 23, 42, 0.35) 50%,
+    rgba(15, 23, 42, 0.55) 100%
+  );
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem;
+}
+
+.hero-overlay h1 {
+  color: #ffffff;
+  font-size: 2.25rem;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  margin-bottom: 1rem;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+
+.hero-overlay blockquote {
+  background: rgba(255,255,255,0.12);
+  border-left: 3px solid rgba(255,255,255,0.5);
+  color: rgba(255,255,255,0.92);
+  font-size: 0.95rem;
+  max-width: 480px;
+  margin: 0;
+  backdrop-filter: blur(4px);
+  border-radius: 0 6px 6px 0;
+}
+
+@media (max-width: 768px) {
+  .hero-banner {
+    margin: -3.5rem calc(-1 * var(--content-px)) 2rem;
+    height: 300px;
+  }
+  .hero-overlay h1 {
+    font-size: 1.75rem;
+  }
+  .hero-overlay blockquote {
+    font-size: 0.85rem;
+    max-width: 320px;
+  }
+}
