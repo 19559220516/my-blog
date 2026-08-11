@@ -1,0 +1,28 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro'
+---
+
+<BaseLayout title="项目 — YOURSITE">
+  <main>
+    <h1>📂 项目</h1>
+    <p style="color:var(--text-secondary);margin-bottom:2rem">我做过的一些项目，点击查看详情。</p>
+
+    <a href="/my-blog/projects/sn-workorder" class="project-card">
+      <h3>SN 售后工单系统</h3>
+      <p>基于微信小程序的售后工单全流程管理系统，支持工单创建/分配/跟踪、客户管理、数据看板、消息通知，配套 PC 后台管理端。</p>
+      <div class="tags">
+        <span class="tag">微信小程序</span>
+        <span class="tag">Node.js</span>
+        <span class="tag">Express</span>
+        <span class="tag">MySQL</span>
+        <span class="tag">ECharts</span>
+        <span class="tag">企业级</span>
+      </div>
+    </a>
+
+    <div class="project-card" style="opacity:0.6">
+      <h3>更多项目即将添加…</h3>
+      <p>正在整理中</p>
+    </div>
+  </main>
+</BaseLayout>

@@ -1,0 +1,43 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+---
+
+<BaseLayout title="YOURSITE — 个人博客" description="记录项目与技术思考的个人站点">
+  <main>
+    <section class="hero">
+      <h1>👋 你好，我是 YourName</h1>
+      <p>全栈开发者，专注于微信小程序、Node.js 和前端工程化。</p>
+      <div class="skills">
+        <span class="skill-tag">微信小程序</span>
+        <span class="skill-tag">Node.js</span>
+        <span class="skill-tag">Express</span>
+        <span class="skill-tag">MySQL</span>
+        <span class="skill-tag">JavaScript</span>
+        <span class="skill-tag">HTML/CSS</span>
+        <span class="skill-tag">Git</span>
+        <span class="skill-tag">Docker</span>
+      </div>
+    </section>
+
+    <section>
+      <h2>📂 项目</h2>
+
+      <a href="/my-blog/projects/sn-workorder" class="project-card">
+        <h3>SN 售后工单系统</h3>
+        <p>基于微信小程序的售后工单全流程管理系统，支持工单创建/分配/跟踪、客户管理、数据看板，配套 PC 后台管理端。</p>
+        <div class="tags">
+          <span class="tag">微信小程序</span>
+          <span class="tag">Node.js</span>
+          <span class="tag">Express</span>
+          <span class="tag">MySQL</span>
+          <span class="tag">ECharts</span>
+        </div>
+      </a>
+
+      <div class="project-card" style="opacity:0.6">
+        <h3>更多项目即将添加…</h3>
+        <p>这里将会展示更多作品</p>
+      </div>
+    </section>
+  </main>
+</BaseLayout>

@@ -1,0 +1,73 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro'
+
+const title = 'SN 售后工单系统'
+const description = '基于微信小程序的售后工单全流程管理系统'
+const date = '2025-08-11'
+const tags = ['微信小程序', 'Node.js', 'Express', 'MySQL', 'ECharts']
+const repo = 'https://github.com/19559220516/sn-workorder'
+---
+
+<BaseLayout title="SN 售后工单系统 — YOURSITE">
+  <main>
+    <h1>SN 售后工单系统</h1>
+    <p style="color:var(--text-secondary)">
+      发布于 2025-08-11
+      &nbsp;·&nbsp;
+      <a href="https://github.com/19559220516/sn-workorder" target="_blank">GitHub 源码</a>
+    </p>
+
+    <h2>项目简介</h2>
+    <p>
+      基于微信小程序的售后工单管理系统，涵盖工单全生命周期管理，从创建、分配、处理到完成，配合 PC 管理后台实现高效运营。
+      支持多角色协作（管理员/主管/工程师/客户），具备实时消息通知和数据统计分析能力。
+    </p>
+
+    <h2>技术栈</h2>
+    <div class="skills">
+      <span class="skill-tag">微信小程序</span>
+      <span class="skill-tag">Node.js</span>
+      <span class="skill-tag">Express</span>
+      <span class="skill-tag">MySQL</span>
+      <span class="skill-tag">ECharts</span>
+      <span class="skill-tag">Docker</span>
+      <span class="skill-tag">JWT</span>
+    </div>
+
+    <h2>核心功能</h2>
+    <ul>
+      <li><strong>工单管理</strong> — 创建、分配、转交、跟进、完成全流程，支持图片上传和费用记录</li>
+      <li><strong>客户管理</strong> — 客户信息维护，创建工单自动关联客户</li>
+      <li><strong>维护商管理</strong> — 第三方维护商信息与工单关联</li>
+      <li><strong>用户管理</strong> — 多角色权限（管理员/主管/工程师），实时在线状态</li>
+      <li><strong>数据看板</strong> — 工单统计、类型分布、趋势分析，ECharts 可视化</li>
+      <li><strong>消息通知</strong> — 站内消息系统，工单状态变更自动通知，15天自动清理</li>
+      <li><strong>通讯录</strong> — 用户列表在线状态显示，20秒实时刷新</li>
+      <li><strong>PC 后台</strong> — 独立管理端，支持批量操作、CSV 导出、数据筛选</li>
+    </ul>
+
+    <h2>技术亮点</h2>
+    <ul>
+      <li>数据库自动迁移，部署即可用，无需手动执行 SQL</li>
+      <li>命令模式操作日志，所有操作可追溯</li>
+      <li>微信服务通知集成，工单创建/转交/状态变更实时推送</li>
+      <li>用户在线状态自动检测，onShow/onHide 防抖上报</li>
+      <li>分包加载优化，页面加载速度提升 40%</li>
+      <li>代码包体积优化，主包仅 3.6KB</li>
+    </ul>
+
+    <h2>系统架构</h2>
+    <pre><code>┌─────────────┐     ┌──────────────┐     ┌──────────┐
+│ 微信小程序   │────▶│  Node.js      │────▶│  MySQL    │
+│ (主包+分包)  │     │  Express API  │     │  数据库   │
+└─────────────┘     └──────────────┘     └──────────┘
+                            │
+                     ┌──────┴──────┐
+                     │  PC 管理端  │
+                     │  (静态页面) │
+                     └─────────────┘</code></pre>
+
+    <h2>项目截图</h2>
+    <p style="color:var(--text-secondary);font-style:italic">即将添加截图展示…</p>
+  </main>
+</BaseLayout>

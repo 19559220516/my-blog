@@ -1,0 +1,31 @@
+---
+import '../styles/global.css'
+
+const { title, description } = Astro.props
+---
+
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content={description || '个人博客 — 记录项目与技术思考'} />
+  <title>{title || 'YOURSITE'}</title>
+</head>
+<body>
+  <header>
+    <a href="/my-blog/" class="site-title">🏠 YOURSITE</a>
+    <nav>
+      <a href="/my-blog/">首页</a>
+      <a href="/my-blog/projects/">项目</a>
+      <a href="/my-blog/about/">关于</a>
+    </nav>
+  </header>
+
+  <slot />
+
+  <footer>
+    &copy; {new Date().getFullYear()} YOURSITE. Built with Astro.
+  </footer>
+</body>
+</html>
