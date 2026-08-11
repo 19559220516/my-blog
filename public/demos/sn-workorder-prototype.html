@@ -1,0 +1,1155 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>SN售后工单系统 - 交互原型</title>
+<style>
+/* ===== DESIGN SYSTEM (matches app.wxss) ===== */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;background:#E8ECF1;overflow:hidden}
+:root{
+  --blue:#3B82F6;--blueD:#2563EB;--blueL:#DBEAFE;--blueBg:#EFF6FF;
+  --green:#10B981;--greenL:#D1FAE5;--greenBg:#ECFDF5;
+  --orange:#F59E0B;--orangeL:#FEF3C7;--orangeBg:#FFFBEB;
+  --red:#EF4444;--redL:#FEE2E2;--redBg:#FEF2F2;
+  --g50:#F5F7FA;--g100:#F2F3F5;--g200:#E5E6EB;--g300:#C9CDD4;--g400:#A7ABB5;
+  --g500:#86909C;--g600:#6B7785;--g700:#4E5969;--g800:#2E3644;--g900:#1D2129;
+  --pcBlue:#2B5AED;--pcSidebar:#1A2332;
+  --w:375px;--h:812px;
+}
+
+/* ===== MAIN LAYOUT ===== */
+.layout{display:flex;height:100vh;min-width:1200px}
+
+/* LEFT SIDEBAR */
+.sb{width:220px;background:#fff;border-right:1px solid var(--g200);display:flex;flex-direction:column;flex-shrink:0;z-index:10}
+.sb-hd{padding:18px 14px 14px;border-bottom:1px solid var(--g100)}
+.sb-hd .logo{width:36px;height:36px;border-radius:10px;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700}
+.sb-hd h1{font-size:15px;font-weight:700;color:var(--g900)}
+.sb-hd p{font-size:11px;color:var(--g400);margin-top:2px}
+.sb-nav{flex:1;overflow-y:auto;padding:6px 0}
+.nav-gp{margin-bottom:4px}
+.nav-gp-t{font-size:10px;font-weight:700;color:var(--g400);text-transform:uppercase;letter-spacing:1px;padding:10px 16px 4px}
+.nav-item{display:flex;align-items:center;gap:8px;padding:9px 12px;margin:0 8px 1px;border-radius:8px;cursor:pointer;font-size:12.5px;color:var(--g600);transition:all .12s;border:2px solid transparent;user-select:none}
+.nav-item:hover{background:var(--g50)}
+.nav-item.active{background:var(--blueBg);color:var(--blue);border-color:var(--blue);font-weight:600}
+.nav-item .ni{font-style:normal;font-size:14px;width:20px;text-align:center}
+
+/* CENTER */
+.main{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px;background:#dce3ec;min-width:500px;overflow:auto}
+.main-t{text-align:center;margin-bottom:12px}
+.main-t h2{font-size:18px;font-weight:700;color:var(--g800)}
+.main-t p{font-size:12px;color:var(--g500)}
+
+/* RIGHT INFO */
+.info{width:280px;background:#fff;border-left:1px solid var(--g200);padding:18px;overflow-y:auto;flex-shrink:0;font-size:12px}
+.info h3{font-size:13px;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.info-block{background:var(--g50);border-radius:8px;padding:10px 12px;margin-bottom:10px}
+.info-block h4{font-size:11px;color:var(--g600);margin-bottom:6px}
+.info-block p,.info-block li{font-size:11px;color:var(--g500);line-height:1.7}
+.info-block ul{padding-left:16px}
+.info-block .tg{display:inline-block;padding:1px 6px;border-radius:3px;font-size:10px;font-weight:600;margin:0 2px}
+.tg-b{background:var(--blueL);color:var(--blue)}
+.tg-g{background:var(--greenL);color:var(--green)}
+.tg-o{background:var(--orangeL);color:var(--orange)}
+.tg-r{background:var(--redL);color:var(--red)}
+
+/* ===== IPHONE SIMULATOR ===== */
+.phone-wrap{margin-bottom:8px}
+.phone{
+  width:var(--w);height:var(--h);background:#fff;border-radius:46px;border:10px solid #111;
+  box-shadow:0 0 0 2px #2a2a2a,0 20px 50px -12px rgba(0,0,0,.3);
+  position:relative;overflow:hidden;display:flex;flex-direction:column;
+  transform:scale(0.84);transform-origin:top center;
+}
+/* Notch */
+.notch{position:absolute;top:0;left:50%;transform:translateX(-50%);width:150px;height:28px;background:#111;border-radius:0 0 18px 18px;z-index:200}
+/* Status Bar */
+.sbar{height:44px;display:flex;align-items:flex-end;justify-content:space-between;padding:0 28px 8px 36px;font-size:13px;font-weight:700;color:#000;flex-shrink:0;position:relative;z-index:50}
+.sbar .sigs{display:flex;align-items:flex-end;gap:1px;height:10px;margin-bottom:2px}
+.sbar .b1{width:2px;height:3px;background:#000;border-radius:1px}
+.sbar .b2{width:2px;height:5px;background:#000;border-radius:1px}
+.sbar .b3{width:2px;height:7px;background:#000;border-radius:1px}
+.sbar .b4{width:2px;height:9px;background:#000;border-radius:1px}
+.sbar .bat{width:22px;height:10px;border:1.5px solid #000;border-radius:2px;padding:1.5px;margin-bottom:2px;margin-left:2px}
+.sbar .batin{width:100%;height:100%;background:#000;border-radius:1px}
+/* Nav */
+.nbar{height:44px;display:flex;align-items:center;padding:0 12px;flex-shrink:0;background:#fff;border-bottom:1px solid var(--g100)}
+.nbar .back{font-size:16px;padding:4px 8px;cursor:pointer;color:var(--g600);min-width:32px}
+.nbar .ntitle{flex:1;text-align:center;font-size:16px;font-weight:600;color:#000}
+.nbar .capsule{display:flex;align-items:center;gap:8px;border:1px solid rgba(0,0,0,.15);border-radius:15px;padding:3px 10px;font-size:11px;background:rgba(0,0,0,.04);min-width:48px;justify-content:center}
+.capsule .dot{width:4px;height:4px;background:var(--g600);border-radius:50%}
+/* Content */
+.ctn{flex:1;overflow-y:auto;overflow-x:hidden;background:var(--g100)}
+/* TabBar */
+.tbar{height:50px;display:flex;align-items:center;border-top:1px solid var(--g100);flex-shrink:0;background:#fff;gap:0}
+.tbar .tb{flex:1;text-align:center;font-size:10px;color:var(--g400);padding:3px 0;cursor:pointer;user-select:none}
+.tbar .tb.on{color:var(--blue);font-weight:600}
+.tbar .tb i{display:block;font-size:18px;font-style:normal;margin-bottom:1px;line-height:1}
+/* Home bar */
+.hbar{height:30px;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:#fff}
+.hbar>div{width:120px;height:4px;background:var(--g800);border-radius:2px;opacity:.25}
+
+/* ===== SCREENS ===== */
+.screen{display:none;flex-direction:column;height:100%}
+.screen.active{display:flex}
+
+/* --- SHARED STYLES --- */
+.p16{padding:14px}
+.mb10{margin-bottom:10px}
+.mb12{margin-bottom:12px}
+.mb14{margin-bottom:14px}
+.f11{font-size:11px}.f12{font-size:12px}.f13{font-size:13px}.f14{font-size:14px}
+.g0{color:var(--g800)}.g1{color:var(--g600)}.g2{color:var(--g500)}.g3{color:var(--g400)}
+.b{font-weight:600}
+.card{background:#fff;border-radius:16px;padding:14px;box-shadow:0 2px 4px rgba(0,0,0,.04);margin-bottom:10px}
+/* Status */
+.st{display:inline-block;padding:2px 10px;border-radius:32px;font-size:10px;font-weight:500}
+.st-pend{background:var(--orangeBg);color:var(--orange)}
+.st-proc{background:var(--blueBg);color:var(--blue)}
+.st-done{background:var(--greenBg);color:var(--green)}
+.st-canc{background:var(--g100);color:var(--g400)}
+.st-sm{font-size:9px;padding:2px 8px}
+
+/* Priority */
+.tg-r{background:#FFE0E0;color:var(--red)}
+/* Tag */
+.tg{display:inline-block;padding:2px 8px;border-radius:8px;font-size:10px;font-weight:500}
+.tg-b{background:var(--blueL);color:var(--blue)}
+.tg-g{background:var(--greenL);color:var(--green)}
+.tg-o{background:var(--orangeL);color:var(--orange)}
+.tg-r{background:var(--redL);color:var(--red)}
+.tg-gy{background:var(--g100);color:var(--g500)}
+/* Dot */
+.dot{width:8px;height:8px;border-radius:50%;display:inline-block;flex-shrink:0}
+.dot-on{background:var(--green)}
+.dot-off{background:var(--g300)}
+/* Avatar */
+.av{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;color:#fff;flex-shrink:0}
+.av1{background:#3B82F6}.av2{background:#10B981}.av3{background:#F59E0B}.av4{background:#8B5CF6}.av5{background:#EC4899}.av6{background:#EF4444}.av7{background:#06B6D4}.av8{background:#F97316}
+/* Search */
+.srch{position:relative;margin-bottom:12px}
+.srch .si{position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:14px}
+.srch input{width:100%;height:38px;border:none;background:#fff;border-radius:12px;padding:0 14px 0 34px;font-size:13px;outline:none;box-shadow:0 2px 4px rgba(0,0,0,.04)}
+/* Filter tag */
+.ftags{display:flex;gap:6px;margin-bottom:12px}
+.ftag{padding:5px 14px;border-radius:32px;font-size:11px;cursor:pointer;color:var(--g600);background:#fff;border:1px solid var(--g200);user-select:none}
+.ftag.on{background:var(--blue);color:#fff;border-color:var(--blue)}
+/* FAB */
+.fab{position:absolute;right:16px;bottom:74px;background:var(--blue);color:#fff;border-radius:28px;padding:10px 18px;display:flex;align-items:center;gap:4px;font-size:13px;font-weight:600;box-shadow:0 4px 12px rgba(59,130,246,.4);cursor:pointer;z-index:50}
+.fab .fp{font-size:22px;font-weight:300}
+
+/* ====== SCREEN: LOGIN ====== */
+.login-page{background:var(--blue);height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.login-page::before{content:'';position:absolute;width:260px;height:260px;border-radius:50%;background:rgba(255,255,255,.06);top:-80px;right:-60px}
+.login-page::after{content:'';position:absolute;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,.04);bottom:-40px;left:-40px}
+.login-logo{width:64px;height:64px;border-radius:16px;background:#fff;color:var(--blue);display:flex;align-items:center;justify-content:center;font-size:30px;font-weight:800;margin-bottom:8px;z-index:1}
+.login-page h2{font-size:20px;color:#fff;font-weight:700;z-index:1;margin-bottom:24px}
+.login-card{background:#fff;border-radius:16px;padding:24px 20px;width:280px;z-index:1;box-shadow:0 8px 32px rgba(0,0,0,.2)}
+.login-card h3{font-size:16px;text-align:center;margin-bottom:16px;font-weight:600}
+.login-card input{width:100%;height:42px;border:1px solid var(--g200);border-radius:10px;padding:0 12px;font-size:13px;margin-bottom:10px;outline:none;background:var(--g50)}
+.login-card input:focus{border-color:var(--blue)}
+.login-card .wx-btn{width:100%;height:44px;background:#07C160;color:#fff;border:none;border-radius:22px;font-size:15px;font-weight:600;margin-top:6px;cursor:pointer}
+.login-foot{color:rgba(255,255,255,.6);font-size:11px;margin-top:24px;z-index:1}
+
+/* ====== SCREEN: WORKBENCH ====== */
+.wb-hd{background:#EDF0F5;padding:14px;display:flex;align-items:center;gap:12px}
+.wb-hd .wb-av{width:44px;height:44px;border-radius:50%;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;flex-shrink:0}
+.wb-hd .wb-info{flex:1}
+.wb-hd .wb-name{font-size:15px;font-weight:600;color:var(--g800)}
+.wb-hd .wb-sub{font-size:11px;color:var(--g500)}
+.wb-hd .wb-status{display:flex;align-items:center;gap:4px;font-size:11px;color:var(--green)}
+.wb-qact{display:flex;gap:10px;padding:14px 14px 0}
+.wb-qact .qa{flex:1;background:linear-gradient(135deg,var(--blue),var(--blueD));color:#fff;border-radius:12px;padding:14px;font-size:13px;font-weight:600;cursor:pointer}
+.wb-qact .qa.g2{background:linear-gradient(135deg,var(--green),#059669)}
+.wb-stats{display:flex;gap:8px;padding:14px}
+.wb-stats .ws{flex:1;background:#fff;border-radius:12px;padding:12px 8px;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.wb-stats .ws .val{font-size:24px;font-weight:700;line-height:1}
+.wb-stats .ws .lbl{font-size:10px;color:var(--g400);margin-top:4px}
+.ws.c1 .val{color:var(--orange)}.ws.c2 .val{color:var(--blue)}.ws.c3 .val{color:var(--green)}.ws.c4 .val{color:var(--g700)}
+.wb-sect{padding:0 14px 8px;font-size:14px;font-weight:600}
+.wb-list{padding:0 14px 14px}
+.wb-item{background:#fff;border-radius:12px;padding:12px 14px;margin-bottom:8px;box-shadow:0 1px 3px rgba(0,0,0,.04);display:flex;align-items:center;gap:12px}
+.wb-item .wi-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.wb-item .wi-info{flex:1;min-width:0}
+.wb-item .wi-title{font-size:13px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.wb-item .wi-meta{font-size:10px;color:var(--g400);margin-top:2px}
+.wb-item .wi-stat{font-size:10px}
+
+/* ====== SCREEN: ORDER LIST ====== */
+.ol-page{background:var(--g100);display:flex;flex-direction:column;height:100%;position:relative}
+.ol-tb{padding:12px 14px 4px;background:var(--g100)}
+.ol-card{background:#fff;border-radius:12px;padding:14px;margin:0 14px 10px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.ol-card .ol-hd{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px}
+.ol-card .ol-title{font-size:14px;font-weight:600;flex:1;margin-right:8px}
+.ol-card .ol-body{font-size:12px;color:var(--g500);margin-bottom:6px;display:flex;align-items:center;gap:8px}
+.ol-card .ol-ft{display:flex;justify-content:space-between;font-size:10px;color:var(--g400)}
+
+/* ====== SCREEN: ORDER DETAIL ====== */
+.od-page{background:var(--g100);padding:14px;height:100%}
+.od-card{background:#fff;border-radius:16px;padding:14px;box-shadow:0 1px 3px rgba(0,0,0,.04);margin-bottom:10px}
+.od-hd{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px}
+.od-title{font-size:16px;font-weight:600;flex:1}
+.od-grid{display:flex;flex-wrap:wrap}
+.od-item{width:50%;padding:8px 0;border-bottom:1px solid var(--g100)}
+.od-item .od-lbl{font-size:10px;color:var(--g400);margin-bottom:2px}
+.od-item .od-val{font-size:13px;font-weight:500}
+.od-desc{font-size:13px;color:var(--g600);line-height:1.6;padding:12px 0}
+.od-acts{display:flex;gap:8px;margin-bottom:10px}
+.od-acts .oda{flex:1;height:36px;border-radius:18px;border:none;font-size:12px;font-weight:600;cursor:pointer}
+.oda-prim{background:var(--blue);color:#fff}
+.oda-out{background:#fff;color:var(--blue);border:1px solid var(--blue)}
+/* Timeline */
+.tl{position:relative;padding-left:24px}
+.tl::before{content:'';position:absolute;left:7px;top:6px;bottom:6px;width:2px;background:var(--g200)}
+.tl-it{position:relative;padding-bottom:18px}
+.tl-it:last-child{padding-bottom:0}
+.tl-dot{position:absolute;left:-17px;top:4px;width:12px;height:12px;border-radius:50%;background:var(--blue);border:2px solid #fff}
+.tl-dot.g{background:var(--green)}
+.tl-dot.o{background:var(--orange)}
+.tl-tm{font-size:10px;color:var(--g400);margin-bottom:2px}
+.tl-tx{font-size:12px;color:var(--g700);line-height:1.5}
+/* Photos */
+.od-photos{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+.od-photos img{width:72px;height:72px;border-radius:8px;object-fit:cover;background:var(--g100);border:1px solid var(--g200)}
+
+/* ====== SCREEN: ORDER FORM ====== */
+.of-page{background:var(--g100);height:100%}
+.of-body{padding:14px;flex:1;overflow-y:auto}
+.of-sect{font-size:14px;font-weight:600;padding:8px 0 10px}
+.of-row{margin-bottom:12px}
+.of-row label{display:block;font-size:11px;color:var(--g600);font-weight:500;margin-bottom:4px}
+.of-row input,.of-row select,.of-row textarea{width:100%;height:38px;border:1px solid var(--g200);border-radius:10px;padding:0 10px;font-size:13px;outline:none;background:var(--g50)}
+.of-row textarea{height:70px;padding:8px 10px;resize:none}
+.of-row input:focus,.of-row select:focus,.of-row textarea:focus{border-color:var(--blue);background:#fff}
+.of-photos{display:flex;gap:8px}
+.of-photo-box{width:68px;height:68px;border:1px dashed var(--g300);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;color:var(--g300);background:var(--g50);cursor:pointer}
+.of-ft{display:flex;gap:10px;padding:12px 14px;background:#fff;border-top:1px solid var(--g100)}
+.of-ft .btn{flex:1;height:40px;border-radius:20px;border:none;font-size:14px;font-weight:600;cursor:pointer}
+.of-ft .btn-cancel{background:var(--g100);color:var(--g600)}
+.of-ft .btn-submit{background:var(--blue);color:#fff}
+
+/* ====== SCREEN: CUSTOMER LIST ====== */
+.cl-card{background:#fff;border-radius:12px;padding:14px;margin:0 14px 10px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.cl-hd{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.cl-name{font-size:14px;font-weight:600}
+.cl-tag{font-size:10px;padding:2px 6px;border-radius:4px;background:var(--blueL);color:var(--blue);margin-left:6px}
+.cl-addr{font-size:11px;color:var(--g500);margin-bottom:6px;display:flex;align-items:center;gap:4px}
+.cl-contact{font-size:12px;color:var(--g600);margin-bottom:4px;display:flex;justify-content:space-between}
+.cl-ft{font-size:10px;color:var(--g400);display:flex;justify-content:space-between}
+
+/* ====== SCREEN: CONTACTS ====== */
+.ct-grid{display:flex;flex-wrap:wrap;gap:8px;padding:14px}
+.ct-card{width:calc(33.33% - 6px);background:#fff;border-radius:12px;padding:12px 8px;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,.04);position:relative}
+.ct-card .ct-av{width:44px;height:44px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;color:#fff;font-size:18px;font-weight:700;margin-bottom:6px}
+.ct-card .ct-dot{position:absolute;top:8px;right:8px;width:8px;height:8px;border-radius:50%}
+.ct-card .ct-name{font-size:12px;font-weight:500;color:var(--g800)}
+.ct-card .ct-role{font-size:10px;color:var(--g400);margin-top:2px}
+.ct-idx{position:fixed;right:4px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:0;z-index:10}
+.ct-idx span{padding:2px 6px;font-size:9px;color:var(--blue);cursor:pointer}
+
+/* ====== SCREEN: MESSAGES ====== */
+.msg-tb{padding:10px 14px;background:#fff;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--g100);font-size:12px}
+.msg-tb .unread{color:var(--g600);font-weight:500}
+.msg-tb .all-read{color:var(--blue);cursor:pointer}
+.msg-card{display:flex;background:#fff;padding:14px;gap:12px;align-items:flex-start;border-bottom:1px solid var(--g50)}
+.msg-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.msg-mi1{background:var(--blueL)}.msg-mi2{background:var(--greenL)}.msg-mi3{background:var(--orangeL)}.msg-mi4{background:var(--redL)}
+.msg-body{flex:1;min-width:0}
+.msg-title{font-size:14px;font-weight:500;margin-bottom:3px}
+.msg-prev{font-size:12px;color:var(--g400);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.msg-rt{text-align:right;flex-shrink:0}
+.msg-time{font-size:10px;color:var(--g300);margin-bottom:4px}
+.msg-tag{display:inline-block;padding:2px 6px;border-radius:4px;font-size:10px;font-weight:500}
+
+/* ====== SCREEN: MINE ====== */
+.mine-page{background:var(--g100);height:100%}
+.mine-card{background:linear-gradient(135deg,var(--blue),var(--blueD));margin:14px;border-radius:16px;padding:20px;color:#fff;display:flex;align-items:center;gap:14px}
+.mine-av{width:52px;height:52px;border-radius:50%;background:rgba(255,255,255,.2);color:#fff;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:700;flex-shrink:0}
+.mine-info{flex:1}
+.mine-name{font-size:17px;font-weight:700}
+.mine-phone{font-size:12px;opacity:.8;margin-top:2px}
+.mine-stats{display:flex;margin:0 14px 14px;background:#fff;border-radius:12px;padding:14px 0}
+.mine-stats .ms{flex:1;text-align:center;border-right:1px solid var(--g100)}
+.mine-stats .ms:last-child{border-right:none}
+.mine-stats .ms .val{font-size:20px;font-weight:700}
+.mine-stats .ms .lbl{font-size:10px;color:var(--g400);margin-top:2px}
+.ms.c0 .val{color:var(--orange)}.ms.c1 .val{color:var(--blue)}.ms.c2 .val{color:var(--green)}.ms.c3 .val{color:var(--g700)}
+.mine-menu{background:#fff;border-radius:12px;margin:0 14px;overflow:hidden}
+.mine-menu .mm{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid var(--g50);font-size:14px;cursor:pointer}
+.mine-menu .mm:last-child{border-bottom:none}
+.mine-menu .mm .mm-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;margin-right:10px;flex-shrink:0}
+.mm-i1{background:var(--blueL)}.mm-i2{background:var(--greenL)}.mm-i3{background:var(--orangeL)}.mm-i4{background:#EDE9FE}.mm-i5{background:var(--g100)}
+.mm-left{display:flex;align-items:center}
+.mm-arrow{color:var(--g300);font-size:12px}
+.mine-logout{text-align:center;padding:20px 14px}
+.mine-logout button{width:100%;height:44px;border-radius:22px;border:none;background:var(--red);color:#fff;font-size:15px;font-weight:600;cursor:pointer}
+
+/* ====== SCREEN: STATISTICS ====== */
+.stat-page{background:var(--g100);height:100%}
+.stat-tb{padding:12px 14px;background:var(--g100)}
+.seg{display:flex;background:var(--g200);border-radius:8px;padding:2px;margin-bottom:10px}
+.seg>div{flex:1;text-align:center;padding:7px 0;border-radius:6px;font-size:12px;color:var(--g600);cursor:pointer;user-select:none}
+.seg>div.on{background:#fff;color:var(--g800);font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.06)}
+.stat-nums{display:flex;gap:0;margin-bottom:12px}
+.stat-nums .sn{flex:1;text-align:center}
+.stat-nums .sn .sn-val{font-size:28px;font-weight:700}
+.stat-nums .sn .sn-lbl{font-size:10px;color:var(--g400);margin-top:2px}
+.sn .sn-val.c1{color:var(--orange)}.sn .sn-val.c2{color:var(--green)}.sn .sn-val.c3{color:var(--orange)}.sn .sn-val.c4{color:var(--blue)}
+/* Bars */
+.bar-row{display:flex;align-items:center;gap:8px;padding:4px 0}
+.bar-row .bar-lbl{width:48px;font-size:11px;color:var(--g600);text-align:right;flex-shrink:0}
+.bar-row .bar-wrap{flex:1;height:20px;background:var(--g100);border-radius:10px;overflow:hidden}
+.bar-row .bar-fill{height:100%;border-radius:10px;background:var(--blue);min-width:4px}
+.bar-row .bar-num{width:36px;font-size:10px;color:var(--g500);flex-shrink:0}
+
+/* ====== SCREEN: PC ADMIN ====== */
+/* Login */
+.pc-login{height:100%;background:linear-gradient(135deg,#2B5AED 0%,#5B7FF5 100%);display:flex;align-items:center;justify-content:center}
+.pc-login-card{width:260px;background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,.15)}
+.pc-login-hd{text-align:center;padding:28px 28px 20px}
+.pc-login-logo{width:48px;height:48px;background:var(--pcBlue);color:#fff;font-size:20px;font-weight:700;border-radius:12px;display:inline-flex;align-items:center;justify-content:center;margin-bottom:10px}
+.pc-login-hd h3{font-size:18px;font-weight:700}
+.pc-login-hd p{font-size:11px;color:var(--g500);margin-top:2px}
+.pc-login-body{padding:0 24px 20px}
+.pc-login-body input{width:100%;height:38px;border:1px solid var(--g200);border-radius:6px;padding:0 10px;font-size:12px;margin-bottom:8px;outline:none}
+.pc-login-body button{width:100%;height:38px;background:var(--pcBlue);color:#fff;border:none;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer}
+.pc-login-hint{font-size:10px;color:var(--g400);text-align:center;padding:0 24px 16px}
+/* Main */
+.pc-main{height:100%;display:flex;flex-direction:column}
+.pc-header{height:40px;background:#fff;border-bottom:1px solid var(--g200);display:flex;align-items:center;padding:0 10px;justify-content:space-between;flex-shrink:0}
+.pc-header .pc-title{font-size:13px;font-weight:600}
+.pc-header .pc-user{font-size:11px;color:var(--g500);display:flex;align-items:center;gap:4px}
+.pc-body{flex:1;display:flex;overflow:hidden}
+.pc-sidebar{width:68px;background:var(--pcSidebar);display:flex;flex-direction:column;padding-top:6px;flex-shrink:0}
+.pc-sidebar .pc-si{padding:10px 6px;text-align:center;font-size:10px;color:var(--g400);cursor:pointer}
+.pc-sidebar .pc-si.on{color:#fff;background:rgba(255,255,255,.08);border-left:3px solid var(--pcBlue)}
+.pc-sidebar .pc-si i{display:block;font-size:18px;font-style:normal;margin-bottom:2px}
+.pc-content{flex:1;overflow-y:auto;padding:8px;background:var(--g50)}
+.pc-stats{display:flex;gap:6px;margin-bottom:8px}
+.pc-stats .ps{flex:1;background:#fff;border-radius:6px;padding:10px 8px;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.pc-stats .ps .psv{font-size:22px;font-weight:700;line-height:1}
+.pc-stats .ps .psl{font-size:9px;color:var(--g400);margin-top:2px}
+.ps.c1 .psv{color:var(--orange)}.ps.c2 .psv{color:var(--blue)}.ps.c3 .psv{color:var(--green)}
+.pc-tbl{background:#fff;border-radius:6px;overflow-x:auto;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.pc-tbl table{width:100%;border-collapse:collapse;font-size:10px;white-space:nowrap}
+.pc-tbl th{text-align:left;padding:7px 6px;background:var(--g50);color:var(--g500);font-weight:600;font-size:9px}
+.pc-tbl td{padding:6px;border-bottom:1px solid var(--g50);color:var(--g600)}
+.pc-tbl a{text-decoration:none;margin:0 2px}
+.pc-tbl a:hover{text-decoration:underline}
+.pc-pag span.on{color:var(--pcBlue);font-weight:600}
+
+/* PC sub-screen toolbar */
+.pc-tb-row{display:flex;align-items:center;gap:8px;padding:10px 14px;background:#fff;border-bottom:1px solid var(--g100);flex-wrap:wrap}
+.pc-input{padding:6px 10px;border:1px solid var(--g100);border-radius:6px;font-size:10px;width:140px;outline:none}
+.pc-input:focus{border-color:var(--pcBlue)}
+.pc-sel{padding:6px 8px;border:1px solid var(--g100);border-radius:6px;font-size:10px;outline:none;background:#fff}
+.pc-btn{padding:6px 14px;border:none;border-radius:6px;font-size:10px;font-weight:600;cursor:pointer}
+.pc-btn-d{background:var(--red);color:#fff}
+
+/* Customer detail screen */
+.cd-page{background:var(--g100);padding:14px}
+.cd-id-card{background:linear-gradient(135deg,#EFF6FF,#DBEAFE);border-radius:12px;padding:14px;margin-bottom:10px;display:flex;align-items:center;gap:12px}
+.cd-id-card .cd-ic{font-size:28px}
+.cd-id-card .cd-id-title{font-size:10px;color:var(--g500)}
+.cd-id-card .cd-id-val{font-size:14px;font-weight:700;color:var(--g800)}
+.cd-grid{display:flex;flex-wrap:wrap;background:#fff;border-radius:12px;padding:14px;margin-bottom:10px}
+.cd-grid .cd-gi{width:50%;padding:8px 0;border-bottom:1px solid var(--g50)}
+.cd-grid .cd-gi .cd-gl{font-size:10px;color:var(--g400)}
+.cd-grid .cd-gi .cd-gv{font-size:13px;font-weight:500;margin-top:2px}
+.cd-orders{background:#fff;border-radius:12px;padding:14px;margin-bottom:10px}
+.cd-orders h4{font-size:14px;margin-bottom:8px}
+.cd-order-item{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--g50);font-size:12px}
+.cd-order-item:last-child{border-bottom:none}
+.cd-btns{display:flex;gap:8px}
+.cd-btns button{flex:1;height:36px;border-radius:18px;border:none;font-size:12px;font-weight:600;cursor:pointer}
+</style>
+</head>
+<body>
+<div class="layout">
+
+<!-- ========== LEFT SIDEBAR ========== -->
+<aside class="sb">
+  <div class="sb-hd">
+    <div class="logo">SN</div>
+    <h1>SN售后工单系统</h1>
+    <p>交互式线框原型 v3.0</p>
+  </div>
+  <div class="sb-nav">
+    <div class="nav-gp"><div class="nav-gp-t">📱 小程序端</div></div>
+    <div class="nav-item active" data-screen="login"><span class="ni">🔐</span>用户登录</div>
+    <div class="nav-item" data-screen="dashboard"><span class="ni">🏠</span>工作台首页</div>
+    <div class="nav-item" data-screen="orders"><span class="ni">📋</span>工单列表</div>
+    <div class="nav-item" data-screen="order-detail"><span class="ni">📝</span>工单详情</div>
+    <div class="nav-item" data-screen="order-form"><span class="ni">➕</span>创建工单</div>
+    <div class="nav-item" data-screen="contacts"><span class="ni">👥</span>通讯录</div>
+    <div class="nav-item" data-screen="messages"><span class="ni">💬</span>消息中心</div>
+    <div class="nav-item" data-screen="customers"><span class="ni">👤</span>客户列表</div>
+    <div class="nav-item" data-screen="customer-detail"><span class="ni">📇</span>客户详情</div>
+    <div class="nav-item" data-screen="mine"><span class="ni">⚙️</span>个人中心</div>
+    <div class="nav-item" data-screen="statistics"><span class="ni">📊</span>数据统计</div>
+    <div class="nav-gp"><div class="nav-gp-t">💻 PC管理后台</div></div>
+    <div class="nav-item" data-screen="pc-login"><span class="ni">🔑</span>PC登录页</div>
+    <div class="nav-item" data-screen="pc-admin"><span class="ni">📊</span>PC仪表盘</div>
+    <div class="nav-item" data-screen="pc-orders"><span class="ni">📋</span>PC工单管理</div>
+    <div class="nav-item" data-screen="pc-customers"><span class="ni">👥</span>PC客户管理</div>
+    <div class="nav-item" data-screen="pc-users"><span class="ni">👤</span>PC用户管理</div>
+    <div class="nav-item" data-screen="pc-vendors"><span class="ni">🏢</span>PC维护商管理</div>
+  </div>
+  <div style="padding:10px 14px;font-size:10px;color:var(--g400);border-top:1px solid var(--g100)">
+    点击标签切换预览 · <a href="../admin" target="_blank" style="color:var(--blue)">打开实际后台</a>
+  </div>
+</aside>
+
+<!-- ========== CENTER: PHONE SIMULATOR ========== -->
+<main class="main">
+  <div class="main-t"><h2 id="stitle">用户登录</h2><p id="ssub">手机端预览</p></div>
+  <div class="phone-wrap">
+    <div class="phone" id="phone">
+      <div class="notch"></div>
+      <!-- Status Bar -->
+      <div class="sbar">
+        <div style="display:flex;align-items:center;gap:4px">
+          <div class="sigs"><div class="b1"></div><div class="b2"></div><div class="b3"></div><div class="b4"></div></div>
+          <span style="font-size:11px;margin-bottom:2px">中国移动</span>
+          <span style="font-size:11px;margin-bottom:1px">WiFi</span>
+        </div>
+        <div id="sTime" style="font-size:13px">9:41</div>
+        <div style="display:flex;align-items:center">
+          <div class="bat"><div class="batin"></div></div>
+        </div>
+      </div>
+      <!-- Nav Bar -->
+      <div class="nbar">
+        <span class="back" id="nBack" style="opacity:0">‹</span>
+        <span class="ntitle" id="nTitle">登录</span>
+        <span class="capsule"><div class="dot"></div><div class="dot"></div><div class="dot"></div></span>
+      </div>
+      <!-- Content -->
+      <div class="ctn" id="phoneCtn">
+
+<!-- ====== LOGIN ====== -->
+<div class="screen active" id="sc-login">
+<div class="login-page">
+  <div class="login-logo">SN</div>
+  <h2>售后工单系统</h2>
+  <div class="login-card">
+    <h3>欢迎使用</h3>
+    <input placeholder="请输入用户名" value="zhangsan" readonly>
+    <input type="password" placeholder="请输入密码" value="123456" readonly>
+    <button class="wx-btn" onclick="switchTo('dashboard')">微信一键登录</button>
+    <div style="text-align:center;font-size:11px;color:var(--g400);margin-top:10px">首次登录自动注册账号</div>
+  </div>
+  <div class="login-foot">SN 内部管理系统 v2.0</div>
+</div>
+</div>
+
+<!-- ====== DASHBOARD ====== -->
+<div class="screen" id="sc-dashboard">
+<div style="height:100%;display:flex;flex-direction:column;background:var(--g100)">
+  <div style="flex:1;overflow-y:auto">
+    <!-- Header -->
+    <div class="wb-hd">
+      <div class="wb-av">张</div>
+      <div class="wb-info"><div class="wb-name">你好，张三</div><div class="wb-sub">维修工程师 · 上午好</div></div>
+      <div class="wb-status"><span class="dot dot-on" style="width:8px;height:8px"></span>在线</div>
+    </div>
+    <!-- Quick Actions -->
+    <div class="wb-qact">
+      <div class="qa" style="font-size:12px;cursor:pointer" onclick="switchTo('order-form')">📝 创建工单</div>
+      <div class="qa g2" style="font-size:12px;cursor:pointer" onclick="switchTo('customers')">👤 客户档案</div>
+    </div>
+    <!-- Stats (clickable to filter) -->
+    <div class="wb-stats">
+      <div class="ws c1" style="cursor:pointer" onclick="switchTo('orders')"><div class="val">7</div><div class="lbl">待处理</div></div>
+      <div class="ws c2" style="cursor:pointer" onclick="switchTo('orders')"><div class="val">23</div><div class="lbl">处理中</div></div>
+      <div class="ws c3" style="cursor:pointer" onclick="switchTo('orders')"><div class="val">98</div><div class="lbl">已完成</div></div>
+      <div class="ws c4" style="cursor:pointer" onclick="switchTo('orders')"><div class="val">128</div><div class="lbl">总工单</div></div>
+    </div>
+    <!-- Recent Orders -->
+    <div class="wb-sect">最近工单</div>
+    <div class="wb-list">
+      <div class="wb-item" style="cursor:pointer" onclick="switchTo('order-detail')"><div class="wi-dot" style="background:var(--orange)"></div><div class="wi-info"><div class="wi-title">空压机异响维修</div><div class="wi-meta">张三 · 08-08 10:30</div></div><span class="st st-pend">待处理</span></div>
+      <div class="wb-item" style="cursor:pointer" onclick="switchTo('order-detail')"><div class="wi-dot" style="background:var(--blue)"></div><div class="wi-info"><div class="wi-title">制冷设备不制冷</div><div class="wi-meta">王芳 · 08-07 15:20</div></div><span class="st st-proc">处理中</span></div>
+      <div class="wb-item" style="cursor:pointer" onclick="switchTo('order-detail')"><div class="wi-dot" style="background:var(--green)"></div><div class="wi-info"><div class="wi-title">注塑机模具故障</div><div class="wi-meta">赵六 · 08-08 08:15</div></div><span class="st st-done">已完成</span></div>
+      <div class="wb-item" style="cursor:pointer" onclick="switchTo('order-detail')"><div class="wi-dot" style="background:var(--green)"></div><div class="wi-info"><div class="wi-title">数控机床精度偏差</div><div class="wi-meta">李四 · 08-06 14:00</div></div><span class="st st-done">已完成</span></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ====== ORDER LIST ====== -->
+<div class="screen" id="sc-orders">
+<div class="ol-page">
+  <div style="flex:1;overflow-y:auto">
+    <div class="ol-tb">
+      <div class="srch"><span class="si">🔍</span><input placeholder="搜索工单标题/客户/编号"></div>
+      <div class="ftags">
+        <span class="ftag on" style="cursor:pointer" onclick="this.parentElement.querySelectorAll('.ftag').forEach(t=>t.classList.remove('on'));this.classList.add('on')">全部</span><span class="ftag" style="cursor:pointer" onclick="this.parentElement.querySelectorAll('.ftag').forEach(t=>t.classList.remove('on'));this.classList.add('on')">待处理</span><span class="ftag" style="cursor:pointer" onclick="this.parentElement.querySelectorAll('.ftag').forEach(t=>t.classList.remove('on'));this.classList.add('on')">处理中</span><span class="ftag" style="cursor:pointer" onclick="this.parentElement.querySelectorAll('.ftag').forEach(t=>t.classList.remove('on'));this.classList.add('on')">已完成</span>
+      </div>
+    </div>
+    <div class="ol-card" style="cursor:pointer" onclick="switchTo('order-detail')">
+      <div class="ol-hd"><span class="ol-title">空压机异响维修</span><span class="st st-pend">待处理</span></div>
+      <div class="ol-body"><span>👤 张三</span><span class="tg tg-b">维修</span></div>
+      <div class="ol-ft"><span>#001</span><span>08-08 10:30</span></div>
+    </div>
+    <div class="ol-card" style="cursor:pointer" onclick="switchTo('order-detail')">
+      <div class="ol-hd"><span class="ol-title">制冷设备不制冷</span><span class="st st-proc">处理中</span></div>
+      <div class="ol-body"><span>👤 王芳</span><span class="tg tg-o">保养</span></div>
+      <div class="ol-ft"><span>#002</span><span>08-07 15:20</span></div>
+    </div>
+    <div class="ol-card" style="cursor:pointer" onclick="switchTo('order-detail')">
+      <div class="ol-hd"><span class="ol-title">注塑机模具故障</span><span class="st st-done">已完成</span></div>
+      <div class="ol-body"><span>👤 赵六</span><span class="tg tg-g">维修</span></div>
+      <div class="ol-ft"><span>#003</span><span>08-08 08:15</span></div>
+    </div>
+    <div class="ol-card" style="cursor:pointer" onclick="switchTo('order-detail')">
+      <div class="ol-hd"><span class="ol-title">数控机床精度偏差</span><span class="st st-proc">处理中</span></div>
+      <div class="ol-body"><span>👤 李四</span><span class="tg tg-b">巡检</span></div>
+      <div class="ol-ft"><span>#004</span><span>08-06 14:00</span></div>
+    </div>
+    <div class="ol-card" style="cursor:pointer" onclick="switchTo('order-detail')">
+      <div class="ol-hd"><span class="ol-title">传送带电机过热</span><span class="st st-done">已完成</span></div>
+      <div class="ol-body"><span>👤 钱七</span><span class="tg tg-g">安装</span></div>
+      <div class="ol-ft"><span>#005</span><span>08-05 09:00</span></div>
+    </div>
+  </div>
+  <div class="fab" style="position:absolute;cursor:pointer" onclick="switchTo('order-form')"><span class="fp">+ </span>新增工单</div>
+</div>
+</div>
+
+<!-- ====== ORDER DETAIL ====== -->
+<div class="screen" id="sc-order-detail">
+<div class="od-page" style="flex:1;overflow-y:auto">
+  <div class="od-card">
+    <div class="od-hd"><span class="od-title">空压机异响维修</span><span class="st st-proc">处理中</span></div>
+    <div class="od-grid">
+      <div class="od-item"><div class="od-lbl">客户</div><div class="od-val">张三</div></div>
+      <div class="od-item"><div class="od-lbl">设备位置</div><div class="od-val">车间A区</div></div>
+      <div class="od-item"><div class="od-lbl">工单类型</div><div class="od-val"><span class="tg tg-b">维修</span></div></div>
+      <div class="od-item"><div class="od-lbl">预估费用</div><div class="od-val" style="color:var(--red)">¥3,500</div></div>
+      <div class="od-item"><div class="od-lbl">优先级</div><div class="od-val"><span class="st st-proc" style="font-size:11px">高</span></div></div>
+      <div class="od-item"><div class="od-lbl">负责人 / 维护商</div><div class="od-val">李明 / 鑫达维修</div></div>
+      <div class="od-item"><div class="od-lbl">创建时间</div><div class="od-val">2026-08-08 10:30</div></div>
+      <div class="od-item"><div class="od-lbl">更新时间</div><div class="od-val">2026-08-08 14:20</div></div>
+    </div>
+  </div>
+  <div class="od-card">
+    <div class="b f14" style="margin-bottom:8px">工单描述</div>
+    <div class="od-desc" style="padding:0">空压机运行时出现异常金属撞击声，压力表指示不稳定，怀疑曲轴轴承磨损。需要专业维修人员现场检查并更换损坏部件。</div>
+    <div class="od-photos"><div style="width:72px;height:72px;background:var(--g100);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:28px;color:var(--g300)">🖼️</div><div style="width:72px;height:72px;background:var(--g100);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:28px;color:var(--g300)">🖼️</div></div>
+  </div>
+  <div class="od-acts">
+    <button class="oda oda-prim" onclick="event.stopPropagation();alert('✅ 状态已更新为：处理中')">更新状态</button>
+    <button class="oda oda-out" onclick="event.stopPropagation();alert('📝 请填写跟进记录')">添加跟进</button>
+    <button class="oda oda-out" onclick="switchTo('customer-detail')">查看客户</button>
+  </div>
+  <div class="od-card">
+    <div class="b f14" style="margin-bottom:12px">跟进记录 (3)</div>
+    <div class="tl">
+      <div class="tl-it"><div class="tl-dot g"></div><div class="tl-tm">08-08 14:20 · 李明</div><div class="tl-tx">已到达现场，正在拆卸压缩机外壳检查内部情况。初步判断曲轴轴承严重磨损，需要更换轴承组件。</div></div>
+      <div class="tl-it"><div class="tl-dot o"></div><div class="tl-tm">08-08 11:00 · 系统</div><div class="tl-tx">工单已分配给维护工程师 李明</div></div>
+      <div class="tl-it"><div class="tl-dot"></div><div class="tl-tm">08-08 10:30 · 张三</div><div class="tl-tx">创建工单：空压机异响，需紧急维修</div></div>
+    </div>
+  </div>
+  <div style="display:flex;gap:8px;padding-bottom:10px">
+    <button style="flex:1;height:38px;border-radius:19px;border:none;background:var(--blue);color:#fff;font-size:13px;font-weight:600;cursor:pointer" onclick="switchTo('order-form')">编辑工单</button>
+    <button style="height:38px;border-radius:19px;border:1px solid var(--blue);background:#fff;color:var(--blue);font-size:13px;font-weight:600;cursor:pointer;padding:0 16px" onclick="event.stopPropagation();alert('✅ 已转交')">转交</button>
+  </div>
+</div>
+</div>
+
+<!-- ====== ORDER FORM ====== -->
+<div class="screen" id="sc-order-form">
+<div class="of-page" style="display:flex;flex-direction:column">
+  <div class="of-body">
+    <div class="of-sect">基本信息</div>
+    <div class="of-row"><label>工单标题 *</label><input placeholder="请输入工单标题"></div>
+    <div class="of-row"><label>客户姓名 *</label><input placeholder="请输入客户姓名"></div>
+    <div class="of-row"><label>设备位置</label><input placeholder="如：车间A区"></div>
+    <div class="of-row">
+      <label>工单类型</label>
+      <select><option>维修</option><option>保养</option><option>巡检</option><option>安装</option></select>
+    </div>
+    <div class="of-row"><label>预估费用 (¥)</label><input placeholder="0.00" type="number"></div>
+    <div class="of-row"><label>维护商</label><input placeholder="选择维护商"></div>
+    <div class="of-row"><label>优先级</label><select><option>普通</option><option>高</option><option>紧急</option></select></div>
+    <div class="of-sect">详细信息</div>
+    <div class="of-row"><label>工单描述</label><textarea placeholder="请详细描述故障现象..."></textarea></div>
+    <div class="of-row"><label>现场图片</label><div class="of-photos"><div class="of-photo-box">📷</div><div class="of-photo-box">+</div></div></div>
+  </div>
+  <div class="of-ft">
+    <button class="btn btn-cancel" onclick="switchTo('orders')">取消</button>
+    <button class="btn btn-submit" onclick="alert('✅ 工单提交成功！');switchTo('orders')">提交工单</button>
+  </div>
+</div>
+</div>
+
+<!-- ====== CONTACTS ====== -->
+<div class="screen" id="sc-contacts">
+<div style="height:100%;display:flex;flex-direction:column;background:var(--g100)">
+  <div style="padding:14px 14px 0">
+    <div class="srch"><span class="si">🔍</span><input placeholder="搜索通讯录..."></div>
+  </div>
+  <div style="flex:1;overflow-y:auto;position:relative">
+    <div class="ct-grid">
+      <div class="ct-card" style="cursor:pointer" onclick="alert('👤 张三 · 维修工程师\n📱 138****6789\n🟢 在线')"><div class="ct-dot dot-on"></div><div class="ct-av av1">张</div><div class="ct-name">张三</div><div class="ct-role">工程师</div></div>
+      <div class="ct-card" style="cursor:pointer" onclick="alert('👤 李明 · 高级技师\n📱 139****8901\n🟢 在线')"><div class="ct-dot dot-on"></div><div class="ct-av av2">李</div><div class="ct-name">李明</div><div class="ct-role">高级技师</div></div>
+      <div class="ct-card" style="cursor:pointer" onclick="alert('👤 王芳 · 管理员\n📱 136****0123\n⚪ 离线')"><div class="ct-dot dot-off"></div><div class="ct-av av3">王</div><div class="ct-name">王芳</div><div class="ct-role">管理员</div></div>
+      <div class="ct-card" style="cursor:pointer" onclick="alert('👤 赵六 · 车间主任\n📱 137****4567\n🟢 在线')"><div class="ct-dot dot-on"></div><div class="ct-av av4">赵</div><div class="ct-name">赵六</div><div class="ct-role">车间主任</div></div>
+      <div class="ct-card" style="cursor:pointer" onclick="alert('👤 李四 · 生产主管\n📱 135****3210\n🟢 在线')"><div class="ct-dot dot-on"></div><div class="ct-av av5">李</div><div class="ct-name">李四</div><div class="ct-role">生产主管</div></div>
+      <div class="ct-card" style="cursor:pointer" onclick="alert('👤 钱七 · 班长\n📱 134****0987\n⚪ 离线')"><div class="ct-dot dot-off"></div><div class="ct-av av6">钱</div><div class="ct-name">钱七</div><div class="ct-role">班长</div></div>
+      <div class="ct-card" style="cursor:pointer" onclick="alert('👤 孙八 · 质检员\n📱 133****5432\n🟢 在线')"><div class="ct-dot dot-on"></div><div class="ct-av av7">孙</div><div class="ct-name">孙八</div><div class="ct-role">质检员</div></div>
+      <div class="ct-card" style="cursor:pointer" onclick="alert('👤 周九 · 安全员\n📱 132****7890\n⚪ 离线')"><div class="ct-dot dot-off"></div><div class="ct-av av8">周</div><div class="ct-name">周九</div><div class="ct-role">安全员</div></div>
+      <div class="ct-card" style="cursor:pointer" onclick="alert('👤 刘十 · 工程师\n📱 131****2468\n🟢 在线')"><div class="ct-dot dot-on"></div><div class="ct-av av1">刘</div><div class="ct-name">刘十</div><div class="ct-role">工程师</div></div>
+    </div>
+    <div class="ct-idx" style="position:absolute">
+      <span>A</span><span>B</span><span>C</span><span>D</span><span>E</span><span>L</span><span>W</span><span>Z</span>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ====== MESSAGES ====== -->
+<div class="screen" id="sc-messages">
+<div style="height:100%;display:flex;flex-direction:column;background:var(--g100)">
+  <div class="msg-tb">
+    <span class="unread">1 条未读</span>
+    <span class="all-read">全部已读 ›</span>
+  </div>
+  <div style="flex:1;overflow-y:auto">
+    <div class="msg-card" style="cursor:pointer" onclick="alert('📢 新工单待处理\n空压机异响维修已创建，请尽快处理\n\n⏰ 14:20 · 🏷️ 待处理')">
+      <div class="msg-icon msg-mi1">📢</div>
+      <div class="msg-body"><div class="msg-title" style="font-weight:600">新工单待处理</div><div class="msg-prev">空压机异响维修已创建，请尽快处理</div></div>
+      <div class="msg-rt"><div class="msg-time">14:20</div><span class="msg-tag tg-o" style="font-size:9px">待处理</span></div>
+    </div>
+    <div class="msg-card" style="cursor:pointer" onclick="alert('🔧 维修进度更新\n李明 更新了工单 #001 的维修进度\n\n⏰ 11:00 · 🏷️ 进度')">
+      <div class="msg-icon msg-mi2">🔧</div>
+      <div class="msg-body"><div class="msg-title">维修进度更新</div><div class="msg-prev">李明 更新了工单 #001 的维修进度</div></div>
+      <div class="msg-rt"><div class="msg-time">11:00</div><span class="msg-tag tg-b" style="font-size:9px">进度</span></div>
+    </div>
+    <div class="msg-card" style="cursor:pointer" onclick="alert('⚠️ 工单超时提醒\n注塑机模具故障工单已超过48小时未处理\n\n⏰ 08-07 · 🏷️ 超时')">
+      <div class="msg-icon msg-mi3">⚠️</div>
+      <div class="msg-body"><div class="msg-title">工单超时提醒</div><div class="msg-prev">注塑机模具故障工单已超过48小时未处理</div></div>
+      <div class="msg-rt"><div class="msg-time">08-07</div><span class="msg-tag tg-r" style="font-size:9px">超时</span></div>
+    </div>
+    <div class="msg-card" style="cursor:pointer" onclick="alert('📊 周报已生成\n本周完成工单15个，处理中8个，待处理3个\n\n⏰ 08-06 · 🏷️ 报告')">
+      <div class="msg-icon msg-mi4">📊</div>
+      <div class="msg-body"><div class="msg-title">周报已生成</div><div class="msg-prev">本周完成工单15个，处理中8个，待处理3个</div></div>
+      <div class="msg-rt"><div class="msg-time">08-06</div><span class="msg-tag tg-g" style="font-size:9px">报告</span></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ====== CUSTOMER LIST ====== -->
+<div class="screen" id="sc-customers">
+<div class="ol-page">
+  <div style="flex:1;overflow-y:auto;padding-top:10px">
+    <div style="padding:0 14px 8px">
+      <div class="srch"><span class="si">🔍</span><input placeholder="搜索计费ID/审计ID/名称/地址..."></div>
+    </div>
+    <div class="cl-card" style="cursor:pointer" onclick="switchTo('customer-detail')">
+      <div class="cl-hd"><span class="cl-name">张三</span><span class="cl-tag">SN集团</span></div>
+      <div class="cl-addr"><span>📍</span>车间A区</div>
+      <div class="cl-contact"><span>联系人：张三</span><span>138****6789</span></div>
+      <div class="cl-ft"><span>计费ID：B-001</span><span>2026-08-08</span></div>
+    </div>
+    <div class="cl-card" style="cursor:pointer" onclick="switchTo('customer-detail')">
+      <div class="cl-hd"><span class="cl-name">王芳</span><span class="cl-tag">宏业科技</span></div>
+      <div class="cl-addr"><span>📍</span>仓库2号</div>
+      <div class="cl-contact"><span>联系人：王芳</span><span>139****8901</span></div>
+      <div class="cl-ft"><span>计费ID：B-002</span><span>2026-08-07</span></div>
+    </div>
+    <div class="cl-card" style="cursor:pointer" onclick="switchTo('customer-detail')">
+      <div class="cl-hd"><span class="cl-name">赵六</span><span class="cl-tag">联创制造</span></div>
+      <div class="cl-addr"><span>📍</span>车间B区</div>
+      <div class="cl-contact"><span>联系人：赵六</span><span>136****0123</span></div>
+      <div class="cl-ft"><span>计费ID：B-003</span><span>2026-08-08</span></div>
+    </div>
+    <div class="cl-card" style="cursor:pointer" onclick="switchTo('customer-detail')">
+      <div class="cl-hd"><span class="cl-name">李四</span><span class="cl-tag">SN集团</span></div>
+      <div class="cl-addr"><span>📍</span>精加工车间</div>
+      <div class="cl-contact"><span>联系人：李四</span><span>137****4567</span></div>
+      <div class="cl-ft"><span>计费ID：B-004</span><span>2026-08-06</span></div>
+    </div>
+  </div>
+  <div class="fab" style="position:absolute;cursor:pointer" onclick="switchTo('order-form')"><span class="fp">+ </span>新增客户</div>
+</div>
+</div>
+
+<!-- ====== CUSTOMER DETAIL ====== -->
+<div class="screen" id="sc-customer-detail">
+<div class="cd-page" style="flex:1;overflow-y:auto">
+  <div class="cd-id-card">
+    <div class="cd-ic">🆔</div>
+    <div>
+      <div class="cd-id-title">计费ID</div>
+      <div class="cd-id-val">B-001</div>
+    </div>
+    <div style="flex:1"></div>
+    <div style="text-align:right">
+      <div class="cd-id-title">审计ID</div>
+      <div class="cd-id-val">A-088</div>
+    </div>
+  </div>
+  <div class="cd-grid">
+    <div class="cd-gi"><div class="cd-gl">客户名称</div><div class="cd-gv">张三</div></div>
+    <div class="cd-gi"><div class="cd-gl">公司</div><div class="cd-gv">SN集团</div></div>
+    <div class="cd-gi"><div class="cd-gl">地址</div><div class="cd-gv">车间A区</div></div>
+    <div class="cd-gi"><div class="cd-gl">联系人</div><div class="cd-gv">张三</div></div>
+    <div class="cd-gi"><div class="cd-gl">联系电话</div><div class="cd-gv">138****6789</div></div>
+    <div class="cd-gi"><div class="cd-gl">维护商</div><div class="cd-gv">鑫达维修</div></div>
+  </div>
+  <div class="cd-orders">
+    <h4>关联工单 (5)</h4>
+    <div class="cd-order-item" style="cursor:pointer" onclick="switchTo('order-detail')"><span>空压机异响维修</span><span class="st st-proc">处理中</span></div>
+    <div class="cd-order-item" style="cursor:pointer" onclick="switchTo('order-detail')"><span>制冷管路检查</span><span class="st st-done">已完成</span></div>
+    <div class="cd-order-item" style="cursor:pointer" onclick="switchTo('order-detail')"><span>电机保养</span><span class="st st-done">已完成</span></div>
+  </div>
+  <div class="cd-btns">
+    <button style="background:var(--blue);color:#fff;cursor:pointer" onclick="switchTo('order-form')">编辑客户</button>
+    <button style="background:var(--g100);color:var(--g600);cursor:pointer" onclick="event.stopPropagation();alert('⚠️ 确认删除该客户？')">删除</button>
+  </div>
+</div>
+</div>
+
+<!-- ====== MINE ====== -->
+<div class="screen" id="sc-mine">
+<div class="mine-page" style="flex:1;overflow-y:auto">
+  <div class="mine-card">
+    <div class="mine-av">张</div>
+    <div class="mine-info"><div class="mine-name">张三</div><div class="mine-phone">138****6789 · 维修工程师</div></div>
+  </div>
+  <div class="mine-stats">
+    <div class="ms c0" style="cursor:pointer" onclick="switchTo('orders')"><div class="val">7</div><div class="lbl">待处理</div></div>
+    <div class="ms c1" style="cursor:pointer" onclick="switchTo('orders')"><div class="val">23</div><div class="lbl">处理中</div></div>
+    <div class="ms c2" style="cursor:pointer" onclick="switchTo('orders')"><div class="val">98</div><div class="lbl">已完成</div></div>
+    <div class="ms c3" style="cursor:pointer" onclick="switchTo('orders')"><div class="val">128</div><div class="lbl">全部</div></div>
+  </div>
+  <div class="mine-menu">
+    <div class="mm" style="cursor:pointer" onclick="switchTo('orders')"><div class="mm-left"><div class="mm-icon mm-i1">📋</div>我的工单</div><span class="mm-arrow">›</span></div>
+    <div class="mm" style="cursor:pointer" onclick="switchTo('statistics')"><div class="mm-left"><div class="mm-icon mm-i2">📊</div>绩效统计</div><span class="mm-arrow">›</span></div>
+    <div class="mm" style="cursor:pointer" onclick="switchTo('messages')"><div class="mm-left"><div class="mm-icon mm-i3">🔔</div>消息通知</div><span class="mm-arrow">›</span></div>
+    <div class="mm" style="cursor:pointer" onclick="toggleOnline()"><div class="mm-left"><div class="mm-icon mm-i4">🌐</div>在线状态</div><span style="display:flex;align-items:center;gap:6px"><span class="dot dot-on" style="width:10px;height:10px" id="mineStatusDot"></span><span class="f12 g1" id="mineStatusText">在线</span><span class="mm-arrow">›</span></span></div>
+    <div class="mm" style="cursor:pointer" onclick="alert('⚙️ 系统设置开发中...')"><div class="mm-left"><div class="mm-icon mm-i5">⚙️</div>系统设置</div><span class="mm-arrow">›</span></div>
+  </div>
+  <div class="mine-logout"><button onclick="switchTo('login')">退出登录</button></div>
+</div>
+</div>
+
+<!-- ====== STATISTICS ====== -->
+<div class="screen" id="sc-statistics">
+<div class="stat-page" style="flex:1;overflow-y:auto">
+  <div class="stat-tb">
+    <div class="seg"><div class="on" style="cursor:pointer" onclick="this.parentElement.querySelectorAll('div').forEach(d=>d.classList.remove('on'));this.classList.add('on')">全员统计</div><div style="cursor:pointer" onclick="this.parentElement.querySelectorAll('div').forEach(d=>d.classList.remove('on'));this.classList.add('on')">个人统计</div></div>
+    <div class="ftags">
+      <span class="ftag on" style="cursor:pointer" onclick="this.parentElement.querySelectorAll('.ftag').forEach(t=>t.classList.remove('on'));this.classList.add('on')">本周</span><span class="ftag" style="cursor:pointer" onclick="this.parentElement.querySelectorAll('.ftag').forEach(t=>t.classList.remove('on'));this.classList.add('on')">本月</span><span class="ftag" style="cursor:pointer" onclick="this.parentElement.querySelectorAll('.ftag').forEach(t=>t.classList.remove('on'));this.classList.add('on')">本季度</span>
+      <span style="flex:1;text-align:right;font-size:11px;color:var(--blue);cursor:pointer" onclick="alert('📊 报表导出成功！')">📊 导出报表</span>
+    </div>
+  </div>
+  <div class="card" style="margin:0 14px 10px">
+    <div class="b f14 mb10">核心指标</div>
+    <div class="stat-nums">
+      <div class="sn"><div class="sn-val c1">128</div><div class="sn-lbl">总工单</div></div>
+      <div class="sn"><div class="sn-val c2">98</div><div class="sn-lbl">已完成</div></div>
+      <div class="sn"><div class="sn-val c3">7</div><div class="sn-lbl">待处理</div></div>
+      <div class="sn"><div class="sn-val c4">23</div><div class="sn-lbl">处理中</div></div>
+    </div>
+  </div>
+  <div class="card" style="margin:0 14px 10px">
+    <div class="b f14 mb10">工单类型分布</div>
+    <div class="bar-row"><span class="bar-lbl">维修</span><div class="bar-wrap"><div class="bar-fill" style="width:65%;background:var(--blue)"></div></div><span class="bar-num">83</span></div>
+    <div class="bar-row"><span class="bar-lbl">保养</span><div class="bar-wrap"><div class="bar-fill" style="width:25%;background:var(--green)"></div></div><span class="bar-num">32</span></div>
+    <div class="bar-row"><span class="bar-lbl">巡检</span><div class="bar-wrap"><div class="bar-fill" style="width:8%;background:var(--orange)"></div></div><span class="bar-num">10</span></div>
+    <div class="bar-row"><span class="bar-lbl">安装</span><div class="bar-wrap"><div class="bar-fill" style="width:3%;background:var(--g300)"></div></div><span class="bar-num">3</span></div>
+  </div>
+</div>
+</div>
+
+<!-- ====== PC LOGIN ====== -->
+<div class="screen" id="sc-pc-login">
+<div class="pc-login">
+  <div class="pc-login-card">
+    <div class="pc-login-hd">
+      <div class="pc-login-logo">S.N.</div>
+      <h3>售后工单系统</h3>
+      <p>请使用管理员账号登录</p>
+    </div>
+    <div class="pc-login-body">
+      <input placeholder="用户名" value="admin" readonly>
+      <input type="password" placeholder="密码" value="admin123" readonly>
+      <button onclick="switchTo('pc-admin')">登 录</button>
+    </div>
+    <div class="pc-login-hint">默认管理员: admin / admin123</div>
+  </div>
+</div>
+</div>
+
+<!-- ====== PC ADMIN ====== -->
+<div class="screen" id="sc-pc-admin">
+<div class="pc-main">
+  <div class="pc-header">
+    <span style="display:flex;align-items:center;gap:6px"><span style="font-size:16px;cursor:pointer">☰</span><span class="pc-title">仪表盘</span></span>
+    <span class="pc-user"><span>Admin</span><span style="font-size:18px">👤</span></span>
+  </div>
+  <div class="pc-body">
+    <div class="pc-sidebar">
+    <div class="pc-si on" id="pcsi-dashboard" onclick="switchTo('pc-admin')"><i>📊</i>仪表盘</div>
+    <div class="pc-si" id="pcsi-orders" onclick="switchTo('pc-orders')"><i>📋</i>工单</div>
+    <div class="pc-si" id="pcsi-customers" onclick="switchTo('pc-customers')"><i>👥</i>客户</div>
+    <div class="pc-si" id="pcsi-users" onclick="switchTo('pc-users')"><i>👤</i>用户</div>
+    <div class="pc-si" id="pcsi-vendors" onclick="switchTo('pc-vendors')"><i>🏢</i>维护商</div>
+    <div style="flex:1"></div>
+    <div class="pc-si" onclick="switchTo('pc-login')"><i>🚪</i>退出</div>
+  </div>
+    <div class="pc-content">
+      <div class="pc-stats">
+        <div class="ps c1"><div class="psv" style="font-size:17px">7</div><div class="psl">待处理</div></div>
+        <div class="ps c2"><div class="psv" style="font-size:17px">23</div><div class="psl">处理中</div></div>
+        <div class="ps c3"><div class="psv" style="font-size:17px">98</div><div class="psl">已完成</div></div>
+        <div class="ps"><div class="psv" style="font-size:17px;color:var(--g700)">128</div><div class="psl">总工单</div></div>
+      </div>
+      <div class="pc-tbl">
+        <table>
+          <tr><th>#</th><th>工单标题</th><th>客户</th><th>状态</th><th>负责人</th><th>时间</th></tr>
+          <tr><td>1</td><td>空压机异响维修</td><td>张三</td><td><span class="st st-pend st-sm">待处理</span></td><td>-</td><td>08-08</td></tr>
+          <tr><td>2</td><td>制冷设备不制冷</td><td>王芳</td><td><span class="st st-proc st-sm">处理中</span></td><td>李明</td><td>08-07</td></tr>
+          <tr><td>3</td><td>注塑机模具故障</td><td>赵六</td><td><span class="st st-done st-sm">已完成</span></td><td>王工</td><td>08-08</td></tr>
+          <tr><td>4</td><td>数控机床精度偏差</td><td>李四</td><td><span class="st st-proc st-sm">处理中</span></td><td>周工</td><td>08-06</td></tr>
+          <tr><td>5</td><td>传送带电机过热</td><td>钱七</td><td><span class="st st-done st-sm">已完成</span></td><td>刘工</td><td>08-05</td></tr>
+        </table>
+      </div>
+      <div class="pc-pag">
+        <span>‹</span><span class="on">1</span><span>2</span><span>3</span><span>...</span><span>26</span><span>›</span>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ====== PC SUB: ORDERS ====== -->
+<div class="screen" id="sc-pc-orders">
+<div class="pc-main">
+  <div class="pc-header">
+    <span style="display:flex;align-items:center;gap:6px"><span style="font-size:16px;cursor:pointer" onclick="switchTo('pc-admin')">☰</span><span class="pc-title">工单管理</span></span>
+    <span class="pc-user"><span>Admin</span><span style="font-size:18px">👤</span></span>
+  </div>
+  <div class="pc-body">
+    <div class="pc-sidebar">
+      <div class="pc-si" onclick="switchTo('pc-admin')"><i>📊</i>仪表盘</div>
+      <div class="pc-si on" onclick="switchTo('pc-orders')"><i>📋</i>工单</div>
+      <div class="pc-si" onclick="switchTo('pc-customers')"><i>👥</i>客户</div>
+      <div class="pc-si" onclick="switchTo('pc-users')"><i>👤</i>用户</div>
+      <div class="pc-si" onclick="switchTo('pc-vendors')"><i>🏢</i>维护商</div>
+      <div style="flex:1"></div>
+      <div class="pc-si" onclick="switchTo('pc-login')"><i>🚪</i>退出</div>
+    </div>
+    <div class="pc-content">
+      <div class="pc-tb-row">
+        <input class="pc-input" placeholder="🔍  搜索工单标题/客户/编号...">
+        <select class="pc-sel"><option>全部状态</option><option>待处理</option><option>处理中</option><option>已完成</option></select>
+        <select class="pc-sel"><option>全部类型</option><option>维修</option><option>保养</option><option>巡检</option><option>安装</option></select>
+        <button class="pc-btn pc-btn-d" style="margin-left:auto">批量删除</button>
+      </div>
+      <div class="pc-tbl">
+        <table>
+          <tr><th style="width:24px"><input type="checkbox"></th><th>#</th><th>工单标题</th><th>客户</th><th>类型</th><th>状态</th><th>优先级</th><th>负责人</th><th>费用</th><th>创建时间</th><th>操作</th></tr>
+          <tr><td><input type="checkbox"></td><td>1</td><td>空压机异响维修</td><td>张三</td><td><span class="tg tg-b">维修</span></td><td><span class="st st-pend st-sm">待处理</span></td><td><span class="tg tg-r">高</span></td><td>-</td><td>¥3,500</td><td>08-08 10:30</td><td><a href="javascript:void(0)" onclick="switchTo('order-detail')" style="color:var(--blue)">详情</a> <a href="javascript:void(0)" onclick="switchTo('order-form')" style="color:var(--orange)">编辑</a></td></tr>
+          <tr><td><input type="checkbox"></td><td>2</td><td>制冷设备不制冷</td><td>王芳</td><td><span class="tg tg-o">保养</span></td><td><span class="st st-proc st-sm">处理中</span></td><td><span class="tg tg-o">中</span></td><td>李明</td><td>¥1,200</td><td>08-07 15:20</td><td><a href="javascript:void(0)" onclick="switchTo('order-detail')" style="color:var(--blue)">详情</a> <a href="javascript:void(0)" onclick="switchTo('order-form')" style="color:var(--orange)">编辑</a></td></tr>
+          <tr><td><input type="checkbox"></td><td>3</td><td>注塑机模具故障</td><td>赵六</td><td><span class="tg tg-g">维修</span></td><td><span class="st st-done st-sm">已完成</span></td><td><span class="tg tg-g">低</span></td><td>王工</td><td>¥8,000</td><td>08-08 08:15</td><td><a href="javascript:void(0)" onclick="switchTo('order-detail')" style="color:var(--blue)">详情</a> <a href="javascript:void(0)" onclick="switchTo('order-form')" style="color:var(--orange)">编辑</a></td></tr>
+          <tr><td><input type="checkbox"></td><td>4</td><td>数控机床精度偏差</td><td>李四</td><td><span class="tg tg-b">巡检</span></td><td><span class="st st-proc st-sm">处理中</span></td><td><span class="tg tg-r">高</span></td><td>周工</td><td>¥2,600</td><td>08-06 14:00</td><td><a href="javascript:void(0)" onclick="switchTo('order-detail')" style="color:var(--blue)">详情</a> <a href="javascript:void(0)" onclick="switchTo('order-form')" style="color:var(--orange)">编辑</a></td></tr>
+          <tr><td><input type="checkbox"></td><td>5</td><td>传送带电机过热</td><td>钱七</td><td><span class="tg tg-g">安装</span></td><td><span class="st st-done st-sm">已完成</span></td><td><span class="tg tg-o">中</span></td><td>刘工</td><td>¥450</td><td>08-05 09:00</td><td><a href="javascript:void(0)" onclick="switchTo('order-detail')" style="color:var(--blue)">详情</a> <a href="javascript:void(0)" onclick="switchTo('order-form')" style="color:var(--orange)">编辑</a></td></tr>
+          <tr><td><input type="checkbox"></td><td>6</td><td>冲压机液压故障</td><td>孙八</td><td><span class="tg tg-b">维修</span></td><td><span class="st st-done st-sm">已完成</span></td><td><span class="tg tg-g">低</span></td><td>赵工</td><td>¥5,100</td><td>08-04 11:00</td><td><a href="javascript:void(0)" onclick="switchTo('order-detail')" style="color:var(--blue)">详情</a> <a href="javascript:void(0)" onclick="switchTo('order-form')" style="color:var(--orange)">编辑</a></td></tr>
+        </table>
+      </div>
+      <div class="pc-pag"><span>共 128 条</span><span style="margin-left:auto">‹</span><span class="on">1</span><span>2</span><span>3</span><span>...</span><span>22</span><span>›</span></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ====== PC SUB: CUSTOMERS ====== -->
+<div class="screen" id="sc-pc-customers">
+<div class="pc-main">
+  <div class="pc-header">
+    <span style="display:flex;align-items:center;gap:6px"><span style="font-size:16px;cursor:pointer" onclick="switchTo('pc-admin')">☰</span><span class="pc-title">客户管理</span></span>
+    <span class="pc-user"><span>Admin</span><span style="font-size:18px">👤</span></span>
+  </div>
+  <div class="pc-body">
+    <div class="pc-sidebar">
+      <div class="pc-si" onclick="switchTo('pc-admin')"><i>📊</i>仪表盘</div>
+      <div class="pc-si" onclick="switchTo('pc-orders')"><i>📋</i>工单</div>
+      <div class="pc-si on" onclick="switchTo('pc-customers')"><i>👥</i>客户</div>
+      <div class="pc-si" onclick="switchTo('pc-users')"><i>👤</i>用户</div>
+      <div class="pc-si" onclick="switchTo('pc-vendors')"><i>🏢</i>维护商</div>
+      <div style="flex:1"></div>
+      <div class="pc-si" onclick="switchTo('pc-login')"><i>🚪</i>退出</div>
+    </div>
+    <div class="pc-content">
+      <div class="pc-tb-row">
+        <input class="pc-input" placeholder="🔍  搜索计费ID/名称/地址/电话...">
+        <button class="pc-btn pc-btn-d" style="margin-left:auto">批量删除</button>
+      </div>
+      <div class="pc-tbl">
+        <table>
+          <tr><th style="width:24px"><input type="checkbox"></th><th>#</th><th>计费ID</th><th>客户名称</th><th>公司</th><th>地址</th><th>联系人</th><th>电话</th><th>维护商</th><th>创建时间</th><th>操作</th></tr>
+          <tr><td><input type="checkbox"></td><td>1</td><td>B-001</td><td>张三</td><td>SN集团</td><td>车间A区</td><td>张三</td><td>138****6789</td><td>鑫达维修</td><td>08-08</td><td><a href="javascript:void(0)" onclick="switchTo('customer-detail')" style="color:var(--blue)">详情</a></td></tr>
+          <tr><td><input type="checkbox"></td><td>2</td><td>B-002</td><td>王芳</td><td>宏业科技</td><td>仓库2号</td><td>王芳</td><td>139****8901</td><td>建安机电</td><td>08-07</td><td><a href="javascript:void(0)" onclick="switchTo('customer-detail')" style="color:var(--blue)">详情</a></td></tr>
+          <tr><td><input type="checkbox"></td><td>3</td><td>B-003</td><td>赵六</td><td>联创制造</td><td>车间B区</td><td>赵六</td><td>136****0123</td><td>科力设备</td><td>08-08</td><td><a href="javascript:void(0)" onclick="switchTo('customer-detail')" style="color:var(--blue)">详情</a></td></tr>
+          <tr><td><input type="checkbox"></td><td>4</td><td>B-004</td><td>李四</td><td>SN集团</td><td>精加工车间</td><td>李四</td><td>137****4567</td><td>鑫达维修</td><td>08-06</td><td><a href="javascript:void(0)" onclick="switchTo('customer-detail')" style="color:var(--blue)">详情</a></td></tr>
+          <tr><td><input type="checkbox"></td><td>5</td><td>B-005</td><td>钱七</td><td>天工精密</td><td>装配线3号</td><td>钱七</td><td>135****3210</td><td>建安机电</td><td>08-05</td><td><a href="javascript:void(0)" onclick="switchTo('customer-detail')" style="color:var(--blue)">详情</a></td></tr>
+        </table>
+      </div>
+      <div class="pc-pag"><span>共 37 条</span><span style="margin-left:auto">‹</span><span class="on">1</span><span>2</span><span>3</span><span>›</span></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ====== PC SUB: USERS ====== -->
+<div class="screen" id="sc-pc-users">
+<div class="pc-main">
+  <div class="pc-header">
+    <span style="display:flex;align-items:center;gap:6px"><span style="font-size:16px;cursor:pointer" onclick="switchTo('pc-admin')">☰</span><span class="pc-title">用户管理</span></span>
+    <span class="pc-user"><span>Admin</span><span style="font-size:18px">👤</span></span>
+  </div>
+  <div class="pc-body">
+    <div class="pc-sidebar">
+      <div class="pc-si" onclick="switchTo('pc-admin')"><i>📊</i>仪表盘</div>
+      <div class="pc-si" onclick="switchTo('pc-orders')"><i>📋</i>工单</div>
+      <div class="pc-si" onclick="switchTo('pc-customers')"><i>👥</i>客户</div>
+      <div class="pc-si on" onclick="switchTo('pc-users')"><i>👤</i>用户</div>
+      <div class="pc-si" onclick="switchTo('pc-vendors')"><i>🏢</i>维护商</div>
+      <div style="flex:1"></div>
+      <div class="pc-si" onclick="switchTo('pc-login')"><i>🚪</i>退出</div>
+    </div>
+    <div class="pc-content">
+      <div class="pc-tb-row">
+        <input class="pc-input" placeholder="🔍  搜索用户姓名/手机号...">
+        <select class="pc-sel"><option>全部状态</option><option>在线</option><option>离线</option></select>
+        <select class="pc-sel"><option>全部角色</option><option>维修工程师</option><option>管理员</option><option>高级技师</option></select>
+        <button class="pc-btn pc-btn-d" style="margin-left:auto">批量删除</button>
+      </div>
+      <div class="pc-tbl">
+        <table>
+          <tr><th style="width:24px"><input type="checkbox"></th><th>#</th><th>用户姓名</th><th>手机号</th><th>角色</th><th>状态</th><th>工单数</th><th>注册时间</th><th>操作</th></tr>
+          <tr><td><input type="checkbox"></td><td>1</td><td>张三</td><td>138****6789</td><td>维修工程师</td><td><span class="st st-done st-sm" style="background:var(--green)">● 在线</span></td><td>128</td><td>2026-06-01</td><td><a href="javascript:void(0)" style="color:var(--blue)">详情</a> <a href="javascript:void(0)" style="color:var(--orange)">编辑</a></td></tr>
+          <tr><td><input type="checkbox"></td><td>2</td><td>李明</td><td>139****8901</td><td>高级技师</td><td><span class="st st-done st-sm" style="background:var(--green)">● 在线</span></td><td>85</td><td>2026-06-05</td><td><a href="javascript:void(0)" style="color:var(--blue)">详情</a> <a href="javascript:void(0)" style="color:var(--orange)">编辑</a></td></tr>
+          <tr><td><input type="checkbox"></td><td>3</td><td>王芳</td><td>136****0123</td><td>管理员</td><td><span class="st st-pend st-sm" style="background:var(--g300)">○ 离线</span></td><td>12</td><td>2026-06-10</td><td><a href="javascript:void(0)" style="color:var(--blue)">详情</a> <a href="javascript:void(0)" style="color:var(--orange)">编辑</a></td></tr>
+          <tr><td><input type="checkbox"></td><td>4</td><td>赵六</td><td>137****4567</td><td>维修工程师</td><td><span class="st st-done st-sm" style="background:var(--green)">● 在线</span></td><td>56</td><td>2026-06-15</td><td><a href="javascript:void(0)" style="color:var(--blue)">详情</a> <a href="javascript:void(0)" style="color:var(--orange)">编辑</a></td></tr>
+          <tr><td><input type="checkbox"></td><td>5</td><td>李四</td><td>135****3210</td><td>维修工程师</td><td><span class="st st-done st-sm" style="background:var(--green)">● 在线</span></td><td>43</td><td>2026-07-01</td><td><a href="javascript:void(0)" style="color:var(--blue)">详情</a> <a href="javascript:void(0)" style="color:var(--orange)">编辑</a></td></tr>
+          <tr><td><input type="checkbox"></td><td>6</td><td>钱七</td><td>134****0987</td><td>管理员</td><td><span class="st st-pend st-sm" style="background:var(--g300)">○ 离线</span></td><td>8</td><td>2026-07-10</td><td><a href="javascript:void(0)" style="color:var(--blue)">详情</a> <a href="javascript:void(0)" style="color:var(--orange)">编辑</a></td></tr>
+        </table>
+      </div>
+      <div class="pc-pag"><span>共 15 条</span><span style="margin-left:auto">‹</span><span class="on">1</span><span>2</span><span>3</span><span>›</span></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ====== PC SUB: VENDORS ====== -->
+<div class="screen" id="sc-pc-vendors">
+<div class="pc-main">
+  <div class="pc-header">
+    <span style="display:flex;align-items:center;gap:6px"><span style="font-size:16px;cursor:pointer" onclick="switchTo('pc-admin')">☰</span><span class="pc-title">维护商管理</span></span>
+    <span class="pc-user"><span>Admin</span><span style="font-size:18px">👤</span></span>
+  </div>
+  <div class="pc-body">
+    <div class="pc-sidebar">
+      <div class="pc-si" onclick="switchTo('pc-admin')"><i>📊</i>仪表盘</div>
+      <div class="pc-si" onclick="switchTo('pc-orders')"><i>📋</i>工单</div>
+      <div class="pc-si" onclick="switchTo('pc-customers')"><i>👥</i>客户</div>
+      <div class="pc-si" onclick="switchTo('pc-users')"><i>👤</i>用户</div>
+      <div class="pc-si on" onclick="switchTo('pc-vendors')"><i>🏢</i>维护商</div>
+      <div style="flex:1"></div>
+      <div class="pc-si" onclick="switchTo('pc-login')"><i>🚪</i>退出</div>
+    </div>
+    <div class="pc-content">
+      <div class="pc-tb-row">
+        <input class="pc-input" placeholder="🔍  搜索维护商名称/联系人...">
+        <button class="pc-btn pc-btn-d" style="margin-left:auto">批量删除</button>
+      </div>
+      <div class="pc-tbl">
+        <table>
+          <tr><th style="width:24px"><input type="checkbox"></th><th>#</th><th>公司名称</th><th>联系人</th><th>电话</th><th>服务类型</th><th>地址</th><th>工单数</th><th>创建时间</th><th>操作</th></tr>
+          <tr><td><input type="checkbox"></td><td>1</td><td>鑫达维修</td><td>张经理</td><td>133****1111</td><td>机床/空压机</td><td>城东工业园</td><td>45</td><td>06-01</td><td><a href="javascript:void(0)" style="color:var(--blue)">详情</a> <a href="javascript:void(0)" style="color:var(--orange)">编辑</a></td></tr>
+          <tr><td><input type="checkbox"></td><td>2</td><td>建安机电</td><td>李工</td><td>133****2222</td><td>制冷/暖通</td><td>城南科技园</td><td>32</td><td>06-05</td><td><a href="javascript:void(0)" style="color:var(--blue)">详情</a> <a href="javascript:void(0)" style="color:var(--orange)">编辑</a></td></tr>
+          <tr><td><input type="checkbox"></td><td>3</td><td>科力设备</td><td>王工</td><td>133****3333</td><td>注塑/模具</td><td>城北开发区</td><td>28</td><td>06-10</td><td><a href="javascript:void(0)" style="color:var(--blue)">详情</a> <a href="javascript:void(0)" style="color:var(--orange)">编辑</a></td></tr>
+          <tr><td><input type="checkbox"></td><td>4</td><td>恒达精工</td><td>赵经理</td><td>133****4444</td><td>数控/自动化</td><td>高新区B座</td><td>18</td><td>06-15</td><td><a href="javascript:void(0)" style="color:var(--blue)">详情</a> <a href="javascript:void(0)" style="color:var(--orange)">编辑</a></td></tr>
+          <tr><td><input type="checkbox"></td><td>5</td><td>振华机电</td><td>刘工</td><td>133****5555</td><td>电机/传动</td><td>经开区8号</td><td>12</td><td>07-01</td><td><a href="javascript:void(0)" style="color:var(--blue)">详情</a> <a href="javascript:void(0)" style="color:var(--orange)">编辑</a></td></tr>
+        </table>
+      </div>
+      <div class="pc-pag"><span>共 8 条</span><span style="margin-left:auto">‹</span><span class="on">1</span><span>2</span><span>›</span></div>
+    </div>
+  </div>
+</div>
+</div>
+
+      </div><!-- /ctn -->
+
+      <!-- TabBar (shown for tab pages) -->
+      <div class="tbar" id="tBar" style="display:none">
+        <div class="tb on" data-goto="dashboard"><i>🛠</i>工作台</div>
+        <div class="tb" data-goto="customers"><i>👥</i>客户</div>
+        <div class="tb" data-goto="orders"><i>📋</i>工单</div>
+        <div class="tb" data-goto="statistics"><i>📊</i>统计</div>
+        <div class="tb" data-goto="messages"><i>📬</i>消息</div>
+      </div>
+
+      <!-- Home Indicator -->
+      <div class="hbar"><div></div></div>
+    </div><!-- /phone -->
+  </div>
+  <p class="f11 g3" style="text-align:center;margin-top:4px">← 点击左侧标签切换页面预览</p>
+</main>
+
+<!-- ========== RIGHT INFO PANEL ========== -->
+<aside class="info" id="infoPanel">
+  <h3>📋 页面说明</h3>
+  <div class="info-block" id="infoBlock">
+    <h4>用户登录</h4>
+    <p>微信小程序启动页面，采用品牌蓝色渐变背景 + 装饰圆形设计。</p>
+    <p style="margin-top:4px"><strong>核心功能：</strong></p>
+    <ul>
+      <li>微信一键登录（<span class="tg tg-g">#07C160</span>）</li>
+      <li>openid 唯一关联，首次登录自动注册</li>
+      <li>登录后自动设为在线状态</li>
+    </ul>
+  </div>
+</aside>
+
+</div><!-- /layout -->
+
+<script>
+// Screen configurations
+const screens = {
+  login:{title:'用户登录',sub:'微信小程序入口',nav:'登录',tab:false},
+  dashboard:{title:'工作台首页',sub:'数据概览 · 快捷入口',nav:'工作台',tab:true},
+  orders:{title:'工单列表',sub:'搜索 · 筛选 · 管理',nav:'工单列表',tab:true},
+  'order-detail':{title:'工单详情',sub:'基本信息 · 跟进记录 · 操作',nav:'工单详情',tab:false},
+  'order-form':{title:'创建工单',sub:'填写信息 · 提交报修',nav:'新建工单',tab:false},
+  contacts:{title:'通讯录',sub:'在线状态 · 实时刷新',nav:'通讯录',tab:false},
+  messages:{title:'消息中心',sub:'通知 · 提醒 · 报告',nav:'消息',tab:true},
+  customers:{title:'客户列表',sub:'客户信息 · 关联工单',nav:'客户管理',tab:true},
+  'customer-detail':{title:'客户详情',sub:'信息 · 关联工单',nav:'客户详情',tab:false},
+  mine:{title:'个人中心',sub:'账户信息 · 设置',nav:'个人中心',tab:true},
+  statistics:{title:'数据统计',sub:'趋势分析 · 报表',nav:'统计',tab:true},
+  'pc-login':{title:'PC登录页',sub:'管理员登录',nav:'PC登录',tab:false},
+  'pc-admin':{title:'PC管理后台',sub:'仪表盘 · 数据管理',nav:'管理后台',tab:false},
+  'pc-orders':{title:'PC工单管理',sub:'搜索 · 筛选 · 批量操作',nav:'工单管理',tab:false},
+  'pc-customers':{title:'PC客户管理',sub:'计费ID · 关联维护商',nav:'客户管理',tab:false},
+  'pc-users':{title:'PC用户管理',sub:'在线状态 · 角色筛选',nav:'用户管理',tab:false},
+  'pc-vendors':{title:'PC维护商管理',sub:'服务类型 · 工单统计',nav:'维护商管理',tab:false}
+};
+
+// Info descriptions
+const infoDesc = {
+  login:'<h4>用户登录</h4><p>品牌蓝色渐变背景 + 装饰圆形，居中白色登录卡片。</p><p style="margin-top:4px"><strong>核心功能：</strong></p><ul><li>微信一键登录（<span class="tg tg-g">#07C160</span>）</li><li>openid唯一关联，首次登录自动注册</li><li>登录/登出自动上报在线状态</li></ul>',
+  dashboard:'<h4>工作台首页</h4><p>灰色头部区域含用户头像、在线状态；双色快捷入口卡片；四宫格统计数据。</p><p style="margin-top:4px"><strong>核心功能：</strong></p><ul><li>4项统计：待处理/处理中/已完成/总数</li><li>创建工单 & 客户档案快捷入口</li><li>最近工单列表（彩色圆点区分状态）</li></ul>',
+  orders:'<h4>工单列表</h4><p>搜索栏 + 状态筛选标签 + 工单卡片列表 + 底部FAB悬浮按钮。</p><p style="margin-top:4px"><strong>核心功能：</strong></p><ul><li>多字段搜索（标题/客户/编号）</li><li>4种状态筛选标签</li><li>卡片含类型标签、客户名、时间</li><li>蓝色FAB：+ 新增工单</li></ul>',
+  'order-detail':'<h4>工单详情</h4><p>顶部标题+状态；2列信息网格；描述+图片；操作按钮；时间线跟进记录。</p><p style="margin-top:4px"><strong>核心功能：</strong></p><ul><li>信息网格（客户/位置/类型/费用等）</li><li>操作按钮组（更新状态/添加跟进/查看客户）</li><li>圆点时间线（蓝色默认/绿色完成/橙色系统）</li><li>底部编辑+转交按钮</li></ul>',
+  'order-form':'<h4>创建工单</h4><p>基本信息 + 详细信息分区，底部固定取消/提交按钮。</p><p style="margin-top:4px"><strong>核心功能：</strong></p><ul><li>工单标题、客户姓名（必填）</li><li>设备位置、类型、费用、优先级</li><li>维护商选择</li><li>故障描述 + 现场图片上传</li></ul>',
+  contacts:'<h4>通讯录</h4><p>搜索栏 + 3列头像网格 + 右侧字母索引。每张卡片含在线状态圆点。</p><p style="margin-top:4px"><strong>核心功能：</strong></p><ul><li>3列网格头像布局</li><li>绿色圆点=在线，灰色=离线</li><li>右侧A-Z字母索引</li><li>每20秒自动刷新在线状态</li></ul>',
+  messages:'<h4>消息中心</h4><p>工具栏（未读数+全部已读）+ 消息卡片列表（图标+内容+类型标签）。</p><p style="margin-top:4px"><strong>核心功能：</strong></p><ul><li>彩色图标区分消息类型</li><li>状态标签（待处理/进度/超时/报告）</li><li>超过15天自动清理（每小时检查）</li></ul>',
+  customers:'<h4>客户列表</h4><p>搜索+客户卡片（名称+公司标签+地址+联系方式+计费ID）+ FAB悬浮按钮。</p><p style="margin-top:4px"><strong>核心功能：</strong></p><ul><li>计费ID/审计ID/名称/地址多条件搜索</li><li>公司标签区分归属</li><li>蓝色FAB：+ 新增客户</li></ul>',
+  'customer-detail':'<h4>客户详情</h4><p>顶部计费ID卡片 + 2列信息网格 + 关联工单列表 + 编辑/删除按钮。</p><p style="margin-top:4px"><strong>核心功能：</strong></p><ul><li>蓝色渐变计费ID/审计ID卡片</li><li>6项基本信息网格</li><li>关联工单（含状态标签）</li></ul>',
+  mine:'<h4>个人中心</h4><p>蓝色渐变头像卡片 + 4项数据统计 + 白色功能菜单 + 红色退出按钮。</p><p style="margin-top:4px"><strong>核心功能：</strong></p><ul><li>用户头像+姓名+手机号+角色</li><li>4项统计（待处理/处理中/已完成/全部）</li><li>菜单含彩色图标（我的工单/绩效/消息/状态/设置）</li><li>在线状态显示+切换</li></ul>',
+  statistics:'<h4>数据统计</h4><p>全员/个人分段控件 + 时间筛选 + 核心指标 + 类型分布柱状图。</p><p style="margin-top:4px"><strong>核心功能：</strong></p><ul><li>全员/个人统计切换</li><li>本周/本月/本季度时间筛选</li><li>4项核心指标数字展示</li><li>工单类型分布彩色柱状图</li></ul>',
+  'pc-login':'<h4>PC登录页</h4><p>蓝紫色渐变背景 + 居中白色登录卡片（400px宽）。</p><p style="margin-top:4px"><strong>核心功能：</strong></p><ul><li>S.N. Logo + 系统标题</li><li>用户名+密码输入框</li><li>默认管理员：admin / admin123</li></ul>',
+  'pc-admin':'<h4>PC管理后台</h4><p>深色侧边栏(<span class="tg tg-b">#1A2332</span>) + 白色内容区 + 顶部导航栏。</p><p style="margin-top:4px"><strong>核心功能：</strong></p><ul><li>仪表盘：4项统计卡片 + 数据表格</li><li>工单/客户/用户/维护商 CRUD</li><li>ID顺序编号、表头全选</li><li>操作日志、消息通知</li></ul>',
+  'pc-orders':'<h4>PC工单管理</h4><p>搜索+状态/类型筛选 + 批量操作 + 数据表格 + 分页。</p><p style="margin-top:4px"><strong>核心功能：</strong></p><ul><li>多条件搜索（标题/客户/编号）</li><li>状态+类型双重筛选</li><li>表头全选、批量删除</li><li>ID顺序编号、操作列（详情/编辑）</li></ul>',
+  'pc-customers':'<h4>PC客户管理</h4><p>搜索+数据表格（计费ID/名称/公司/地址/电话/维护商）+分页。</p><p style="margin-top:4px"><strong>核心功能：</strong></p><ul><li>计费ID/名称/地址/电话多条件搜索</li><li>表头全选、批量删除</li><li>ID顺序编号</li></ul>',
+  'pc-users':'<h4>PC用户管理</h4><p>搜索+状态/角色筛选 + 数据表格 + 在线状态实时显示。</p><p style="margin-top:4px"><strong>核心功能：</strong></p><ul><li>在线/离线筛选</li><li>角色筛选（工程师/管理员/技师）</li><li>在线状态彩色标签</li><li>每15秒轮询刷新</li></ul>',
+  'pc-vendors':'<h4>PC维护商管理</h4><p>搜索+数据表格（名称/联系人/电话/服务类型/地址/工单数）。</p><p style="margin-top:4px"><strong>核心功能：</strong></p><ul><li>名称/联系人搜索</li><li>服务类型列显示</li><li>关联工单数量统计</li></ul>'
+};
+
+let cur = 'login';
+
+function switchTo(name) {
+  const s = screens[name]; if(!s) return;
+  cur = name;
+
+  // sidebar
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  const tab = document.querySelector(`.nav-item[data-screen="${name}"]`);
+  if(tab) tab.classList.add('active');
+
+  // titles
+  document.getElementById('stitle').textContent = s.title;
+  document.getElementById('ssub').textContent = s.sub;
+  document.getElementById('nTitle').textContent = s.nav;
+  document.getElementById('nBack').style.opacity = (name==='login'||name==='pc-login')?'0':'1';
+
+  // tab bar
+  document.getElementById('tBar').style.display = s.tab?'flex':'none';
+  document.querySelectorAll('.tb').forEach(b=>b.classList.remove('on'));
+  const bt = document.querySelector(`.tb[data-goto="${name}"]`);
+  if(bt) bt.classList.add('on');
+
+  // screen
+  document.querySelectorAll('.screen').forEach(sc=>sc.classList.remove('active'));
+  const sc = document.getElementById('sc-'+name);
+  if(sc) sc.classList.add('active');
+
+  // info
+  document.getElementById('infoBlock').innerHTML = infoDesc[name]||'';
+
+  // scroll content to top
+  document.getElementById('phoneCtn').scrollTop = 0;
+}
+
+// Sidebar clicks
+document.querySelectorAll('.nav-item[data-screen]').forEach(item=>{
+  item.addEventListener('click',function(){switchTo(this.dataset.screen);});
+});
+
+// Bottom tab clicks
+document.querySelectorAll('.tb').forEach(bt=>{
+  bt.addEventListener('click',function(){switchTo(this.dataset.goto);});
+});
+
+// Back button
+document.getElementById('nBack').addEventListener('click',function(){
+  if(cur==='order-detail') switchTo('orders');
+  else if(cur==='order-form'||cur==='customer-detail') switchTo('customers');
+  else if(cur==='statistics'||cur==='contacts'||cur==='messages'||cur==='customers'||cur==='mine') switchTo('dashboard');
+  else if(cur.startsWith('pc-') && cur!=='pc-admin' && cur!=='pc-login') switchTo('pc-admin');
+  else switchTo('dashboard');
+});
+
+// toggleOnline function for mine page
+function toggleOnline(){
+  const dot = document.getElementById('mineStatusDot');
+  const txt = document.getElementById('mineStatusText');
+  if(dot && txt){
+    const isOnline = dot.classList.contains('dot-on');
+    if(isOnline){
+      dot.classList.remove('dot-on'); dot.classList.add('dot-off');
+      txt.textContent = '离线';
+    }else{
+      dot.classList.remove('dot-off'); dot.classList.add('dot-on');
+      txt.textContent = '在线';
+    }
+  }
+}
+
+// Toggle PC admin sidebar active state
+document.addEventListener('click',function(e){
+  const si = e.target.closest('.pc-si');
+  if(si && si.onclick){
+    const allSi = si.parentElement.querySelectorAll('.pc-si');
+    allSi.forEach(s=>s.classList.remove('on'));
+    si.classList.add('on');
+  }
+});
+
+// Update status bar time
+setInterval(function(){
+  const d=new Date();
+  document.getElementById('sTime').textContent=d.getHours().toString().padStart(2,'0')+':'+d.getMinutes().toString().padStart(2,'0');
+},30000);
+</script>
+</body>
+</html>
