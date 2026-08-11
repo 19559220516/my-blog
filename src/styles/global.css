@@ -5,33 +5,33 @@
 
 /* ===== CSS Variables: 亮色主题 ===== */
 :root {
-  /* 背景 — 侧边栏浅灰，主区纯白 */
+  /* 背景 — 侧边栏浅灰 #f5f5f5，主区纯白 */
   --bg:            #ffffff;
-  --bg-sidebar:    #e6e8ec;
-  --bg-code:       #f7f8fa;
+  --bg-sidebar:    #f5f5f5;
+  --bg-code:       #f8f9fb;
   --bg-inline-code:#eef0f3;
   --bg-card:       #f8f9fb;
 
-  /* 文字 — 深灰柔和，比纯黑更高级 */
+  /* 文字 — 主标题深色，描述浅灰弱化 */
   --text:          #1e293b;
   --text-secondary:#64748b;
   --text-muted:    #94a3b8;
 
-  /* 品牌色 — 石板灰，不再用蓝紫，沉稳低调 */
-  --brand:         #475569;
-  --brand-light:   #334155;
-  --brand-bg:      #f0f2f5;
+  /* 品牌色 — 蓝色系，用于链接和强调 */
+  --brand:         #2563eb;
+  --brand-light:   #1d4ed8;
+  --brand-bg:      #eff6ff;
 
   /* 边框 / 分割 */
   --border:        #e2e8f0;
   --border-light:  #f1f5f9;
-  --divider:       #e2e8f0;
+  --divider:       #e8ecf1;
 
   /* 侧边栏 */
   --sidebar-text:        #475569;
-  --sidebar-text-active: #1e293b;
-  --sidebar-hover-bg:    #e4e7eb;
-  --sidebar-active-bar:  #475569;
+  --sidebar-text-active: #0f172a;
+  --sidebar-hover-bg:    #ebedf0;
+  --sidebar-active-bar:  #2563eb;
 
   /* 代码 — GitHub 柔和配色 */
   --code-text:     #334155;
@@ -43,12 +43,13 @@
   --code-tag:      #15803d;
 
   /* 阴影 */
-  --shadow-xs: 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-xs:   0 1px 2px rgba(0,0,0,0.04);
+  --shadow-card: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
 
   /* 间距 */
   --sidebar-w:    260px;
   --content-px:   2.5rem;
-  --content-max:  780px;
+  --content-max:  1100px;
   --radius-sm:    4px;
   --radius:       8px;
   --radius-lg:    12px;
@@ -59,7 +60,7 @@
 /* ===== CSS Variables: 暗色主题 ===== */
 .dark {
   --bg:            #1a1b1e;
-  --bg-sidebar:    #222326;
+  --bg-sidebar:    #1e1e21;
   --bg-code:       #26282c;
   --bg-inline-code:#2c2e33;
   --bg-card:       #26282c;
@@ -68,18 +69,18 @@
   --text-secondary:#a1a1aa;
   --text-muted:    #71717a;
 
-  --brand:         #94a3b8;
-  --brand-light:   #cbd5e1;
+  --brand:         #3b82f6;
+  --brand-light:   #60a5fa;
   --brand-bg:      #1e293b;
 
   --border:        #3f3f46;
   --border-light:  #2d2d30;
-  --divider:       #3f3f46;
+  --divider:       #333338;
 
   --sidebar-text:        #a1a1aa;
   --sidebar-text-active: #e4e4e7;
-  --sidebar-hover-bg:    #2e2e33;
-  --sidebar-active-bar:  #94a3b8;
+  --sidebar-hover-bg:    #2a2a2f;
+  --sidebar-active-bar:  #3b82f6;
 
   --code-text:     #cbd5e1;
   --code-comment:  #64748b;
@@ -89,7 +90,8 @@
   --code-number:   #f2c878;
   --code-tag:      #f78c8c;
 
-  --shadow-xs: 0 1px 2px rgba(0,0,0,0.3);
+  --shadow-xs:    0 1px 2px rgba(0,0,0,0.3);
+  --shadow-card:  0 1px 3px rgba(0,0,0,0.2), 0 1px 2px rgba(0,0,0,0.12);
 }
 
 /* ===== Reset & Base ===== */
@@ -293,6 +295,7 @@ li { margin-bottom: 0.35rem; color: var(--text-secondary); }
   min-width: 0;
   padding: 3rem var(--content-px) 4rem;
   max-width: calc(var(--sidebar-w) + var(--content-max) + var(--content-px) * 2);
+  margin-right: auto;
 }
 
 /* ===== Typography ===== */
@@ -301,12 +304,14 @@ h1 {
   font-weight: 800;
   letter-spacing: -0.025em;
   line-height: 1.35;
-  color: var(--text);
+  color: #0f172a;
   margin-bottom: 1rem;
 }
 
+.dark h1 { color: #f1f5f9; }
+
 h2 {
-  font-size: 1.3rem;
+  font-size: 1.25rem;
   font-weight: 700;
   margin: 2.5rem 0 0.75rem;
   padding-bottom: 0.4rem;
@@ -314,7 +319,7 @@ h2 {
   letter-spacing: -0.01em;
   color: var(--text);
 }
-h2:first-child { margin-top: 0; }
+h2:first-of-type { margin-top: 0; }
 
 h3 {
   font-size: 1.05rem;
@@ -332,12 +337,13 @@ strong { color: var(--text); font-weight: 600; }
 
 blockquote {
   margin: 1rem 0;
-  padding: 0.6rem 1rem;
+  padding: 0.75rem 1.25rem;
   border-left: 3px solid var(--brand);
   background: var(--brand-bg);
   border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
   color: var(--text-secondary);
   font-size: 0.95rem;
+  line-height: 1.7;
 }
 
 /* ===== Inline Code ===== */
@@ -373,24 +379,27 @@ pre code {
 /* ===== Doc Card (项目文档条目) ===== */
 .doc-card {
   display: block;
-  padding: 1.35rem 1.5rem;
-  background: var(--bg-card);
+  padding: 1.5rem 1.75rem;
+  background: var(--bg);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  margin-bottom: 0.75rem;
+  margin-bottom: 1rem;
   text-decoration: none;
-  transition: border-color var(--transition), background var(--transition);
+  box-shadow: var(--shadow-card);
+  transition: border-color var(--transition), box-shadow var(--transition), transform var(--transition);
 }
 .doc-card:hover {
   border-color: var(--brand);
-  background: var(--bg);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  transform: translateY(-1px);
   text-decoration: none;
 }
 .doc-card h3 {
-  margin: 0 0 0.35rem;
-  font-size: 1rem;
+  margin: 0 0 0.4rem;
+  font-size: 1.05rem;
   color: var(--text);
-  font-weight: 600;
+  font-weight: 700;
+  letter-spacing: -0.01em;
 }
 .doc-card h3 .arrow {
   display: inline-block;
@@ -400,22 +409,25 @@ pre code {
 }
 .doc-card:hover h3 .arrow { transform: translateX(3px); }
 .doc-card p {
-  margin: 0 0 0.6rem;
+  margin: 0 0 0.75rem;
   font-size: 0.9rem;
   color: var(--text-secondary);
+  line-height: 1.65;
 }
 .doc-card .doc-tags {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.35rem;
+  gap: 0.4rem;
 }
 .doc-tag {
-  font-size: 0.72rem;
-  padding: 0.15rem 0.6rem;
+  font-size: 0.73rem;
+  padding: 0.2rem 0.7rem;
   background: var(--brand-bg);
   color: var(--brand);
+  border: 1px solid rgba(37,99,235,0.12);
   border-radius: 999px;
   font-weight: 500;
+  letter-spacing: 0.01em;
 }
 
 /* ===== Code preview inside doc card ===== */
