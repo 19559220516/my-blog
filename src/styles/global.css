@@ -47,13 +47,13 @@
   --shadow-card: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
 
   /* 玻璃拟态 — 背景图上的半透明表面 */
-  --glass-bg:       rgba(255,255,255,0.82);
-  --glass-sidebar:  rgba(245,245,245,0.88);
-  --glass-code:     rgba(248,249,251,0.85);
-  --glass-inline:   rgba(238,240,243,0.9);
-  --glass-quote:    rgba(239,246,255,0.72);
-  --bg-overlay:     rgba(255,255,255,0.6);
-  --text-shadow:    0 1px 1px rgba(255,255,255,0.65);
+  --glass-bg:       rgba(255,255,255,0.92);
+  --glass-sidebar:  rgba(245,245,245,0.94);
+  --glass-code:     rgba(248,249,251,0.93);
+  --glass-inline:   rgba(238,240,243,0.95);
+  --glass-quote:    rgba(239,246,255,0.88);
+  --bg-overlay:     rgba(255,255,255,0.75);
+  --text-shadow:    none;
 
   /* 间距 */
   --sidebar-w:    260px;
@@ -103,13 +103,13 @@
   --shadow-card:  0 1px 3px rgba(0,0,0,0.2), 0 1px 2px rgba(0,0,0,0.12);
 
   /* 玻璃拟态 — 暗色 */
-  --glass-bg:       rgba(38,40,44,0.78);
-  --glass-sidebar:  rgba(30,30,33,0.88);
-  --glass-code:     rgba(38,40,44,0.85);
-  --glass-inline:   rgba(44,46,51,0.9);
-  --glass-quote:    rgba(30,41,59,0.72);
-  --bg-overlay:     rgba(13,15,20,0.7);
-  --text-shadow:    0 1px 2px rgba(0,0,0,0.5);
+  --glass-bg:       rgba(38,40,44,0.88);
+  --glass-sidebar:  rgba(30,30,33,0.92);
+  --glass-code:     rgba(38,40,44,0.9);
+  --glass-inline:   rgba(44,46,51,0.92);
+  --glass-quote:    rgba(30,41,59,0.82);
+  --bg-overlay:     rgba(13,15,20,0.78);
+  --text-shadow:    none;
 }
 
 /* ===== Reset & Base ===== */
@@ -337,7 +337,6 @@ h1 {
   line-height: 1.35;
   color: #0f172a;
   margin-bottom: 1rem;
-  text-shadow: var(--text-shadow);
 }
 
 .dark h1 { color: #f1f5f9; }
@@ -350,7 +349,6 @@ h2 {
   border-bottom: 1px solid var(--divider);
   letter-spacing: -0.01em;
   color: var(--text);
-  text-shadow: var(--text-shadow);
 }
 h2:first-of-type { margin-top: 0; }
 
@@ -359,13 +357,11 @@ h3 {
   font-weight: 600;
   margin: 1.75rem 0 0.5rem;
   color: var(--text);
-  text-shadow: var(--text-shadow);
 }
 
 p {
   margin-bottom: 1rem;
   color: var(--text-secondary);
-  text-shadow: var(--text-shadow);
 }
 
 strong { color: var(--text); font-weight: 600; }
